@@ -50,7 +50,7 @@ body {
 /* --- HERO --- */
 .hero {
     height: 115vh;
-    background: url("./logov5.png");
+    background: #000; /* Fondo negro de respaldo */
     background-size: cover; 
     background-position: center;
     display: flex; 
@@ -58,7 +58,7 @@ body {
     justify-content: center; 
     color: white; 
     text-align: center;
-    padding-top: 2rem; /* Reducido para dar espacio al logo gigante */
+    padding-top: 2rem; 
     position: relative;
     overflow: hidden;
 }
@@ -71,6 +71,9 @@ body {
     height: 100%;
     object-fit: cover;
     z-index: 1;
+    background-size: cover;
+    /* Evita parpadeos blancos al cargar */
+    background-color: #000; 
 }
 
 .hero-content {
@@ -84,10 +87,10 @@ body {
 
 /* TAMAÑO DEL LOGO AUMENTADO */
 .hero-logo {
-    max-width: 800px; /* Tamaño aumentado de 450px a 800px */
-    width: 95%;      /* Para que en móviles no se corte */
+    max-width: 800px; 
+    width: 95%;      
     margin-bottom: 40px;
-    filter: drop-shadow(0 6px 12px rgba(0,0,0,0.3)); /* Sombra un poco más fuerte */
+    filter: drop-shadow(0 6px 12px rgba(0,0,0,0.3)); 
 }
 
 .hero h1 { 
@@ -96,14 +99,14 @@ body {
     font-weight: 700; 
 }
 .hero p { 
-    font-size: 1.4rem; /* Texto ligeramente más grande */
+    font-size: 1.4rem; 
     margin-bottom: 35px; 
     opacity: 0.95; 
     font-weight: 600;
-    text-shadow: 0 2px 8px rgba(0,0,0,0.5); /* Mejor sombra para lectura */
+    text-shadow: 0 2px 8px rgba(0,0,0,0.5); 
 }
 .btn-conocenos {
-    padding: 18px 50px; /* Botón ligeramente más grande para acompañar el logo */
+    padding: 18px 50px; 
     background: var(--azul-claro); 
     color: white;
     text-decoration: none; 
@@ -135,18 +138,25 @@ body {
     animation: scroll 25s linear infinite; 
 }
 .slide { 
-    width: 1100px; 
-    height: 400px;
+    width: 250px; /* Corregido de 1100px a 250px para el track */
+    height: 150px; /* Ajustado para logos de empresas */
     display: flex; 
     justify-content: center; 
     align-items: center; 
-    font-weight: bold; 
-    color: var(--azul-oscuro); 
-    font-size: 1.3rem; 
+    padding: 20px;
 }
+.slide img {
+    max-width: 150px;
+    max-height: 80px;
+    filter: grayscale(100%);
+    opacity: 0.6;
+    transition: 0.3s;
+}
+.slide img:hover { filter: grayscale(0%); opacity: 1; }
+
 @keyframes scroll { 
     0% { transform: translateX(0); } 
-    100% { transform: translateX(calc(-250px * 16)); } 
+    100% { transform: translateX(calc(-250px * 9)); } 
 }
 
 /* --- SECCIÓN ACERCA --- */
@@ -289,5 +299,5 @@ footer p { font-size: 0.8rem; opacity: 0.6; }
     .contacto-wrapper { grid-template-columns: 1fr; }
     .hero h1 { font-size: 3rem; }
     .card.alt img { height: 350px; }
-    .hero-logo { max-width: 350px; } /* Ajuste de logo para móvil */
+    .hero-logo { max-width: 350px; } 
 }
