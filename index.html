@@ -57,9 +57,15 @@
         .rep-qty { font-weight: bold; font-size: 0.9rem; min-width: 20px; }
 
         .history-box { border-radius: 15px; padding: 20px; margin-bottom: 18px; border: 1px solid rgba(0,0,0,0.1); background: #ffffff; box-shadow: 0 4px 12px rgba(0,0,0,0.05); }
-        .history-box.taller { border-left: 8px solid #007bff; background: #f8fbff; }
-        .history-box.manual { border-left: 8px solid #6c757d; }
+        .history-box.taller { border-left: 8px solid #007bff; background: #f8fbff; cursor: pointer; }
+        .history-box.taller:hover { background: #eef6ff; }
+        .history-box.manual { border-left: 8px solid #6c757d; position: relative; }
         .history-box.pedido { border-left: 8px solid #e83e8c; background: #fffafc; }
+        
+        /* Badge para Stock Real en Historial */
+        .stock-badge-history { position: absolute; top: 10px; right: 10px; font-size: 0.7rem; background: #007bff; color: white; padding: 2px 8px; border-radius: 10px; font-weight: bold; }
+
+        .admin-direct-input { width: 60px; text-align: center; border: 1px solid #007bff; border-radius: 8px; font-weight: bold; margin: 0 5px; }
 
         @media print {
             .no-print { display: none !important; }
@@ -591,6 +597,7 @@
             const mc = document.getElementById('reportMachineType').value;
             const mq = parseInt(document.getElementById('reportMachineQty').value) || 1;
             const ac = document.getElementById('reportActivity').value;
+            const obsFinal = document.getElementById('reportObs').value;
             if(!op || !mc || !ac) return alert("Completa Operario, Máquina y Actividad");
             
             const btn = document.getElementById('btnSaveReport'); 
@@ -605,7 +612,7 @@
                     operator: op, 
                     machine: mc + (mq > 1 ? ` (x${mq})` : ""), 
                     activity: ac, 
-                    observations: document.getElementById('reportObs').value, 
+                    observations: obsFinal, 
                     repuestos: repDetailed, 
                     timestamp: Date.now() 
                 });
@@ -615,21 +622,35 @@
                 if(mId) {
                     const delta = mc.toLowerCase().includes("dispenser natural") ? -1 : 1;
                     const stockCambio = delta * mq;
-                    await update(ref(db, `items/${mId}`), { qty: Math.max(0, globalItems[mId].qty + stockCambio) });
+                    const nuevoStockM = Math.max(0, globalItems[mId].qty + stockCambio);
+                    await update(ref(db, `items/${mId}`), { qty: nuevoStockM });
+                    
+                    // Registro de stock real en historial
+                    await push(ref(db, 'history'), { type: 'taller', user: op.toUpperCase(), desc: `Carga Taller: ${mc} (${stockCambio > 0 ? '+' : ''}${stockCambio}). Stock Final: ${nuevoStockM}`, date: new Date().toLocaleString(), timestamp: Date.now() });
                 }
 
                 if (restrictedUsers.includes(currentUser)) {
                     let repairId = Object.keys(globalItems).find(id => globalItems[id].name.trim().toLowerCase().includes("reparar"));
-                    if (repairId) await update(ref(db, `items/${repairId}`), { qty: Math.max(0, globalItems[repairId].qty - mq) });
+                    if (repairId) {
+                        const nuevoStockR = Math.max(0, globalItems[repairId].qty - mq);
+                        await update(ref(db, `items/${repairId}`), { qty: nuevoStockR });
+                        await push(ref(db, 'history'), { type: 'taller', user: op.toUpperCase(), desc: `Descontado de Reparar por Carga: -${mq}. Stock Final: ${nuevoStockR}`, date: new Date().toLocaleString(), timestamp: Date.now() });
+                    }
                 }
 
                 for(let id in selectedRepuestos) {
-                    if(selectedRepuestos[id].qty > 0) await update(ref(db, `items/${id}`), { qty: Math.max(0, globalItems[id].qty - selectedRepuestos[id].qty) });
+                    if(selectedRepuestos[id].qty > 0) {
+                        const nuevoStockRep = Math.max(0, globalItems[id].qty - selectedRepuestos[id].qty);
+                        await update(ref(db, `items/${id}`), { qty: nuevoStockRep });
+                        await push(ref(db, 'history'), { type: 'taller', user: op.toUpperCase(), desc: `Uso Repuesto: ${selectedRepuestos[id].name} (-${selectedRepuestos[id].qty}). Stock Final: ${nuevoStockRep}`, date: new Date().toLocaleString(), timestamp: Date.now() });
+                    }
                 }
 
                 alert("¡Carga terminada con éxito! ✅");
                 selectedRepuestos = {};
                 document.getElementById('reportMachineQty').value = 1;
+                document.getElementById('reportObs').value = "";
+                document.getElementById('reportActivity').value = "";
                 btn.disabled = false; // REHABILITAR BOTON
                 backToMenu();
             } catch (e) { 
@@ -649,18 +670,25 @@
             });
         }
 
+        // --- FUNCION MODIFICADA PARA PERMITIR CARGA DIRECTA ---
         function renderItem(id, item) {
             let canEdit = false;
+            let isSuperUser = (currentUser === 'admin' || currentUser === 'Facu');
             if(currentUser === 'admin') canEdit = true;
             if(currentUser === 'Facu' && (item.type === 'repuesto' || item.type === 'dispenser' || item.name.toLowerCase().includes("reparar"))) canEdit = true;
 
             const card = document.createElement('div'); card.className = 'col-md-4 item-card-wrapper';
             card.setAttribute('data-name', item.name.toLowerCase());
-            const controlsHtml = canEdit ?
-                `<button class="btn btn-circle btn-outline-danger shadow-sm" onclick="updateStock('${id}', ${item.qty}, -1, '${item.name}')">-</button>
-                 <span class="fs-4 fw-bold">${item.qty}</span>
-                 <button class="btn btn-circle btn-outline-success shadow-sm" onclick="updateStock('${id}', ${item.qty}, 1, '${item.name}')">+</button>` :
-                `<span class="fs-4 fw-bold w-100 text-center">${item.qty}</span>`;
+            
+            let controlsHtml = '';
+            if(canEdit) {
+                controlsHtml = `
+                <button class="btn btn-circle btn-outline-danger shadow-sm" onclick="updateStock('${id}', ${item.qty}, -1, '${item.name}')">-</button>
+                ${isSuperUser ? `<input type="number" class="admin-direct-input" value="${item.qty}" onchange="setStockDirect('${id}', this.value, '${item.name}', ${item.qty})">` : `<span class="fs-4 fw-bold mx-2">${item.qty}</span>`}
+                <button class="btn btn-circle btn-outline-success shadow-sm" onclick="updateStock('${id}', ${item.qty}, 1, '${item.name}')">+</button>`;
+            } else {
+                controlsHtml = `<span class="fs-4 fw-bold w-100 text-center">${item.qty}</span>`;
+            }
 
             card.innerHTML = `
                 <div class="glass-panel stock-card shadow-sm">
@@ -671,10 +699,33 @@
             document.getElementById('itemsContainer').appendChild(card);
         }
 
+        // Función para establecer stock directo (Punto 2)
+        window.setStockDirect = async (id, newVal, name, oldVal) => {
+            const val = parseInt(newVal);
+            if(isNaN(val) || val < 0) return;
+            await update(ref(db, `items/${id}`), { qty: val });
+            const diff = val - oldVal;
+            await push(ref(db, 'history'), { 
+                type: 'manual', 
+                user: currentUser.toUpperCase(), 
+                desc: `Cambio Directo: ${name} (${diff > 0 ? '+' : ''}${diff}). Stock Final: ${val}`, 
+                date: new Date().toLocaleString(), 
+                timestamp: Date.now() 
+            });
+        };
+
         window.updateStock = (id, cur, amt, name) => {
             if(cur + amt < 0) return;
-            update(ref(db, `items/${id}`), { qty: cur + amt });
-            push(ref(db, 'history'), { type: 'manual', user: currentUser.toUpperCase(), desc: `${amt>0?'Sumó':'Restó'} ${Math.abs(amt)} a ${name}`, date: new Date().toLocaleString(), timestamp: Date.now() });
+            const nuevoTotal = cur + amt;
+            update(ref(db, `items/${id}`), { qty: nuevoTotal });
+            // Modificado para mostrar stock real (Punto 3)
+            push(ref(db, 'history'), { 
+                type: 'manual', 
+                user: currentUser.toUpperCase(), 
+                desc: `${amt>0?'Sumó':'Restó'} ${Math.abs(amt)} a ${name}. Stock Final: ${nuevoTotal}`, 
+                date: new Date().toLocaleString(), 
+                timestamp: Date.now() 
+            });
         };
 
         // --- HISTORIALES ---
@@ -682,8 +733,16 @@
             onValue(query(ref(db, 'taller_reports'), limitToLast(12)), snap => {
                 const list = document.getElementById('tallerHistoryList'); list.innerHTML = '';
                 const data = snap.val(); if(!data) return;
-                Object.values(data).sort((a,b) => b.timestamp - a.timestamp).forEach(i => {
-                    list.innerHTML += `<div class="history-box taller"><b>${i.operator}</b> - ${i.machine}<br><small>${i.date}</small></div>`;
+                Object.keys(data).sort((a,b) => data[b].timestamp - data[a].timestamp).forEach(key => {
+                    const i = data[key];
+                    // Agregado onclick para detalle (Punto 1)
+                    const div = document.createElement('div');
+                    div.className = "history-box taller";
+                    div.innerHTML = `<b>${i.operator}</b> - ${i.machine}<br><small>${i.date}</small>`;
+                    div.onclick = () => {
+                        alert(`DETALLE DE CARGA:\n\nOperario: ${i.operator}\nMáquina: ${i.machine}\nActividad: ${i.activity}\n\nCAMBIOS/REPUESTOS:\n${i.repuestos}\n\nOBSERVACIONES:\n${i.observations || 'Sin observaciones'}`);
+                    };
+                    list.appendChild(div);
                 });
             });
         }
@@ -693,7 +752,16 @@
                 const cont = document.getElementById('historyContainer'); cont.innerHTML = '';
                 const data = snap.val(); if(!data) return;
                 Object.values(data).sort((a,b) => b.timestamp - a.timestamp).forEach(l => {
-                    cont.innerHTML += `<div class="history-box manual"><b>${l.user}</b>: ${l.desc}<br><small>${l.date}</small></div>`;
+                    // Buscar si hay un "Stock Final" en la descripción para resaltarlo
+                    let descDisplay = l.desc;
+                    let stockBadge = "";
+                    if(descDisplay.includes("Stock Final:")) {
+                        const parts = descDisplay.split("Stock Final:");
+                        descDisplay = parts[0];
+                        stockBadge = `<span class="stock-badge-history">Total: ${parts[1].trim()}</span>`;
+                    }
+
+                    cont.innerHTML += `<div class="history-box manual">${stockBadge}<b>${l.user}</b>: ${descDisplay}<br><small>${l.date}</small></div>`;
                 });
             });
         }
@@ -710,13 +778,13 @@
             tbody.innerHTML = '';
             if(!data) return;
             Object.values(data).sort((a,b) => b.timestamp - a.timestamp).forEach(i => {
-                tbody.innerHTML += `<tr class="report-row" data-operator="${i.operator.toLowerCase()}">
+                tbody.innerHTML += `<tr class="report-row" data-operator="${i.operator.toLowerCase()}" style="cursor:pointer" onclick="this.style.background='#f0f0f0'">
                     <td>${i.date}</td>
                     <td>${i.operator}</td>
                     <td>${i.machine}</td>
                     <td>${i.activity}</td>
-                    <td>${i.repuestos}</td>
-                    <td>${i.observations || ''}</td>
+                    <td><small>${i.repuestos}</small></td>
+                    <td><small>${i.observations || ''}</small></td>
                 </tr>`;
             });
         }
