@@ -60,6 +60,13 @@
         .history-box.taller { border-left: 8px solid #007bff; background: #f8fbff; }
         .history-box.manual { border-left: 8px solid #6c757d; }
         .history-box.pedido { border-left: 8px solid #e83e8c; background: #fffafc; }
+
+        @media print {
+            .no-print { display: none !important; }
+            .admin-header-controls { display: none !important; }
+            body { background: white !important; }
+            .glass-panel { border: none !important; box-shadow: none !important; }
+        }
     </style>
 </head>
 <body>
@@ -88,7 +95,6 @@
                     <option value="oficina">Oficina</option>
                     <option value="Facu">Facu</option>
                     <option value="planta">Planta</option>
-                    <option value="mauro">Mauro</option>
                     <option value="javier">Javier</option>
                     <option value="facundo">Facundo</option>
                     <option value="admin">Administrador</option>
@@ -159,11 +165,23 @@
                             <i class="bi bi-person-fill modern-input-icon"></i>
                             <input type="text" id="reportOperator" class="modern-input" placeholder="Nombre del Operario">
                         </div>
-                        <div class="modern-input-group">
-                            <select id="reportMachineType" class="modern-input">
-                                <option value="" disabled selected>Seleccionar Máquina (+1 al stock)</option>
-                            </select>
+                        
+                        <!-- CANTIDAD DE MAQUINAS AGREGADA -->
+                        <div class="row g-2">
+                            <div class="col-8">
+                                <div class="modern-input-group">
+                                    <select id="reportMachineType" class="modern-input">
+                                        <option value="" disabled selected>Máquina</option>
+                                    </select>
+                                </div>
+                            </div>
+                            <div class="col-4">
+                                <div class="modern-input-group">
+                                    <input type="number" id="reportMachineQty" class="modern-input text-center" value="1" min="1" placeholder="Cant.">
+                                </div>
+                            </div>
                         </div>
+
                         <label class="small fw-bold mb-2">Repuestos utilizados (Resta cantidad al stock):</label>
                         <div id="repuestosChecklist" class="repuestos-grid mb-3"></div>
                         <div class="modern-input-group"><input type="text" id="reportActivity" class="modern-input" placeholder="Actividad Realizada"></div>
@@ -192,7 +210,24 @@
                     <button onclick="logout()" class="btn btn-danger btn-sm rounded-pill px-3">Salir</button>
                 </div>
             </div>
-            <div class="table-responsive"><table class="table table-hover">
+
+            <!-- FILTROS ADMIN AGREGADOS -->
+            <div class="admin-header-controls row g-3 mb-4">
+                <div class="col-md-6">
+                    <div class="modern-input-group mb-0">
+                        <i class="bi bi-search modern-input-icon"></i>
+                        <input type="text" id="adminSearchOperator" class="modern-input" placeholder="Filtrar por Operador..." onkeyup="filterAdminReports()">
+                    </div>
+                </div>
+                <div class="col-md-3">
+                    <button onclick="exportToExcel()" class="btn btn-success w-100 rounded-pill fw-bold"><i class="bi bi-file-earmark-excel"></i> Excel</button>
+                </div>
+                <div class="col-md-3">
+                    <button onclick="window.print()" class="btn btn-secondary w-100 rounded-pill fw-bold"><i class="bi bi-printer"></i> Imprimir</button>
+                </div>
+            </div>
+
+            <div class="table-responsive"><table class="table table-hover" id="reportsExcelTable">
                 <thead class="table-dark"><tr><th>Fecha</th><th>Operario</th><th>Máquina</th><th>Actividad</th><th>Repuestos</th><th>Obs.</th></tr></thead>
                 <tbody id="adminReportsTable"></tbody>
             </table></div>
@@ -261,13 +296,12 @@
         let unsubChat, unsubAlerts, unsubTaller, unsubItems, unsubHistory, unsubAdmin, unsubRep, unsubPedidosPlanta;
 
         const credentials = { 
-            oficina: "Broncel3876", 
+            oficina: "ro1234", 
             facundo: "facu3876", 
-            Facu: "facu3876",
+            Facu: "facu1234",
             planta: "planta3876", 
             admin: "admin3876",
-            javier: "suragua159",
-            mauro: "mauro3876"
+            javier: "suragua159"
         };
 
         const restrictedUsers = ['mauro', 'javier', 'facundo', 'Facu'];
@@ -522,7 +556,7 @@
                 const contRep = document.getElementById('repuestosChecklist');
                 const selectMaq = document.getElementById('reportMachineType');
                 contRep.innerHTML = '';
-                selectMaq.innerHTML = '<option value="" disabled selected>Seleccionar Máquina (+1 al stock)</option>';
+                selectMaq.innerHTML = '<option value="" disabled selected>Máquina</option>';
                 if(!data) return;
                 Object.keys(data).forEach(id => {
                     const item = data[id];
@@ -555,28 +589,38 @@
         window.saveDailyReport = async () => {
             const op = document.getElementById('reportOperator').value;
             const mc = document.getElementById('reportMachineType').value;
+            const mq = parseInt(document.getElementById('reportMachineQty').value) || 1;
             const ac = document.getElementById('reportActivity').value;
             if(!op || !mc || !ac) return alert("Completa Operario, Máquina y Actividad");
-            const btn = document.getElementById('btnSaveReport'); btn.disabled = true;
+            
+            const btn = document.getElementById('btnSaveReport'); 
+            btn.disabled = true;
 
             try {
                 const repArray = Object.values(selectedRepuestos).filter(r => r.qty > 0);
                 const repDetailed = repArray.length > 0 ? repArray.map(r => `${r.name} (x${r.qty})`).join(', ') : 'Ninguno';
                 
                 await push(ref(db, 'taller_reports'), { 
-                    date: document.getElementById('reportDate').value, operator: op, machine: mc, activity: ac, observations: document.getElementById('reportObs').value, repuestos: repDetailed, timestamp: Date.now() 
+                    date: document.getElementById('reportDate').value, 
+                    operator: op, 
+                    machine: mc + (mq > 1 ? ` (x${mq})` : ""), 
+                    activity: ac, 
+                    observations: document.getElementById('reportObs').value, 
+                    repuestos: repDetailed, 
+                    timestamp: Date.now() 
                 });
 
-                // LÓGICA STOCK: Dispenser Natural resta, el resto suma
+                // LÓGICA STOCK: Dispenser Natural resta, el resto suma (Multiplicado por cantidad MQ)
                 let mId = Object.keys(globalItems).find(id => globalItems[id].name === mc);
                 if(mId) {
                     const delta = mc.toLowerCase().includes("dispenser natural") ? -1 : 1;
-                    await update(ref(db, `items/${mId}`), { qty: Math.max(0, globalItems[mId].qty + delta) });
+                    const stockCambio = delta * mq;
+                    await update(ref(db, `items/${mId}`), { qty: Math.max(0, globalItems[mId].qty + stockCambio) });
                 }
 
                 if (restrictedUsers.includes(currentUser)) {
                     let repairId = Object.keys(globalItems).find(id => globalItems[id].name.trim().toLowerCase().includes("reparar"));
-                    if (repairId) await update(ref(db, `items/${repairId}`), { qty: Math.max(0, globalItems[repairId].qty - 1) });
+                    if (repairId) await update(ref(db, `items/${repairId}`), { qty: Math.max(0, globalItems[repairId].qty - mq) });
                 }
 
                 for(let id in selectedRepuestos) {
@@ -584,8 +628,14 @@
                 }
 
                 alert("¡Carga terminada con éxito! ✅");
+                selectedRepuestos = {};
+                document.getElementById('reportMachineQty').value = 1;
+                btn.disabled = false; // REHABILITAR BOTON
                 backToMenu();
-            } catch (e) { alert("Error: " + e.message); }
+            } catch (e) { 
+                alert("Error: " + e.message); 
+                btn.disabled = false; // REHABILITAR BOTON SI HAY ERROR
+            }
         };
 
         // --- STOCK PERMISOS ---
@@ -595,7 +645,6 @@
                 const cont = document.getElementById('itemsContainer'); cont.innerHTML = '';
                 const data = snap.val(); globalItems = data || {};
                 if(data) Object.keys(data).forEach(id => renderItem(id, data[id]));
-                // PERSISTENCIA DEL BUSCADOR: Llamamos al filtro tras cada renderizado
                 filterItems();
             });
         }
@@ -603,7 +652,6 @@
         function renderItem(id, item) {
             let canEdit = false;
             if(currentUser === 'admin') canEdit = true;
-            // FACU AHORA PUEDE MODIFICAR REPUESTOS, DISPENSERS Y REPARACIONES
             if(currentUser === 'Facu' && (item.type === 'repuesto' || item.type === 'dispenser' || item.name.toLowerCase().includes("reparar"))) canEdit = true;
 
             const card = document.createElement('div'); card.className = 'col-md-4 item-card-wrapper';
@@ -652,12 +700,38 @@
 
         window.loadAdminHistory = () => {
             onValue(ref(db, 'taller_reports'), snap => {
-                const tbody = document.getElementById('adminReportsTable'); tbody.innerHTML = '';
-                const data = snap.val(); if(!data) return;
-                Object.values(data).sort((a,b) => b.timestamp - a.timestamp).forEach(i => {
-                    tbody.innerHTML += `<tr><td>${i.date}</td><td>${i.operator}</td><td>${i.machine}</td><td>${i.activity}</td><td>${i.repuestos}</td><td>${i.observations || ''}</td></tr>`;
-                });
+                window.adminDataRaw = snap.val();
+                renderAdminTable(window.adminDataRaw);
             });
+        };
+
+        function renderAdminTable(data) {
+            const tbody = document.getElementById('adminReportsTable'); 
+            tbody.innerHTML = '';
+            if(!data) return;
+            Object.values(data).sort((a,b) => b.timestamp - a.timestamp).forEach(i => {
+                tbody.innerHTML += `<tr class="report-row" data-operator="${i.operator.toLowerCase()}">
+                    <td>${i.date}</td>
+                    <td>${i.operator}</td>
+                    <td>${i.machine}</td>
+                    <td>${i.activity}</td>
+                    <td>${i.repuestos}</td>
+                    <td>${i.observations || ''}</td>
+                </tr>`;
+            });
+        }
+
+        window.filterAdminReports = () => {
+            const term = document.getElementById('adminSearchOperator').value.toLowerCase();
+            document.querySelectorAll('.report-row').forEach(row => {
+                row.style.display = row.dataset.operator.includes(term) ? '' : 'none';
+            });
+        };
+
+        window.exportToExcel = () => {
+            const table = document.getElementById("reportsExcelTable");
+            const wb = XLSX.utils.table_to_book(table, {sheet: "Reportes Taller"});
+            XLSX.writeFile(wb, "Reportes_Suragua_" + new Date().toLocaleDateString() + ".xlsx");
         };
 
         window.addNewItem = () => {
