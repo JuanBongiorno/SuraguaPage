@@ -1,3 +1,5 @@
+--- START OF FILE Paste April 27, 2026 - 1:59PM ---
+
 <!DOCTYPE html>
 <html lang="es">
 <head>
@@ -197,7 +199,20 @@
                 </div>
                 <div class="col-lg-7">
                     <div class="glass-panel p-4 d-flex flex-column" style="height: 850px;">
-                        <h5 class="fw-bold mb-3 d-flex justify-content-between">Historial Reciente <i class="bi bi-clock-history"></i></h5>
+                        <h5 class="fw-bold mb-3 d-flex justify-content-between align-items-center">
+                            Historial de Cargas
+                            <div class="d-flex gap-2">
+                                <button class="btn btn-dark btn-sm rounded-pill px-3 shadow" data-bs-toggle="modal" data-bs-target="#historyModal" onclick="loadHistory()">
+                                    <i class="bi bi-clock-history"></i> Stock
+                                </button>
+                                <i class="bi bi-journal-text text-primary"></i>
+                            </div>
+                        </h5>
+                        <!-- Buscador de Historial de Taller -->
+                        <div class="modern-input-group mb-3">
+                            <i class="bi bi-search modern-input-icon"></i>
+                            <input type="text" id="searchTallerHistory" class="modern-input" placeholder="Buscar máquina, operario o fecha..." onkeyup="filterTallerHistory()">
+                        </div>
                         <div id="tallerHistoryList" style="flex-grow: 1; overflow-y: auto; padding-right: 10px;"></div>
                         <button onclick="backToMenu()" class="btn btn-outline-danger w-100 mt-3 rounded-pill fw-bold">VOLVER AL MENÚ</button>
                     </div>
@@ -307,7 +322,7 @@
             Facu: "facu1234",
             planta: "planta3876", 
             admin: "admin3876",
-            javier: "suragua159"
+            javier: "javi1234"
         };
 
         const restrictedUsers = ['mauro', 'javier', 'facundo', 'Facu'];
@@ -730,14 +745,16 @@
 
         // --- HISTORIALES ---
         function loadTallerHistory() {
-            onValue(query(ref(db, 'taller_reports'), limitToLast(12)), snap => {
+            // ELIMINADO EL LÍMITE DE 12 PARA VER TODO EL HISTORIAL
+            onValue(ref(db, 'taller_reports'), snap => {
                 const list = document.getElementById('tallerHistoryList'); list.innerHTML = '';
                 const data = snap.val(); if(!data) return;
                 Object.keys(data).sort((a,b) => data[b].timestamp - data[a].timestamp).forEach(key => {
                     const i = data[key];
-                    // Agregado onclick para detalle (Punto 1)
                     const div = document.createElement('div');
-                    div.className = "history-box taller";
+                    div.className = "history-box taller taller-item-row";
+                    // Data attributes para el filtro
+                    div.setAttribute('data-search', `${i.operator} ${i.machine} ${i.date}`.toLowerCase());
                     div.innerHTML = `<b>${i.operator}</b> - ${i.machine}<br><small>${i.date}</small>`;
                     div.onclick = () => {
                         alert(`DETALLE DE CARGA:\n\nOperario: ${i.operator}\nMáquina: ${i.machine}\nActividad: ${i.activity}\n\nCAMBIOS/REPUESTOS:\n${i.repuestos}\n\nOBSERVACIONES:\n${i.observations || 'Sin observaciones'}`);
@@ -747,12 +764,18 @@
             });
         }
 
+        window.filterTallerHistory = () => {
+            const term = document.getElementById('searchTallerHistory').value.toLowerCase();
+            document.querySelectorAll('.taller-item-row').forEach(row => {
+                row.style.display = row.dataset.search.includes(term) ? 'block' : 'none';
+            });
+        };
+
         window.loadHistory = () => {
-            onValue(query(ref(db, 'history'), limitToLast(20)), snap => {
+            onValue(query(ref(db, 'history'), limitToLast(50)), snap => {
                 const cont = document.getElementById('historyContainer'); cont.innerHTML = '';
                 const data = snap.val(); if(!data) return;
                 Object.values(data).sort((a,b) => b.timestamp - a.timestamp).forEach(l => {
-                    // Buscar si hay un "Stock Final" en la descripción para resaltarlo
                     let descDisplay = l.desc;
                     let stockBadge = "";
                     if(descDisplay.includes("Stock Final:")) {
@@ -760,7 +783,6 @@
                         descDisplay = parts[0];
                         stockBadge = `<span class="stock-badge-history">Total: ${parts[1].trim()}</span>`;
                     }
-
                     cont.innerHTML += `<div class="history-box manual">${stockBadge}<b>${l.user}</b>: ${descDisplay}<br><small>${l.date}</small></div>`;
                 });
             });
