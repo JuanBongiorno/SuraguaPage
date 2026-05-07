@@ -1,4 +1,3 @@
-
 <!DOCTYPE html>
 <html lang="es">
 <head>
@@ -37,9 +36,10 @@
         .chat-tab { flex: 1; padding: 10px; text-align: center; cursor: pointer; font-size: 0.8rem; font-weight: 600; color: #666; }
         .chat-tab.active { background: white; color: #007bff; border-bottom: 2px solid #007bff; }
         #chat-box-messages { height: 300px; overflow-y: auto; display: flex; flex-direction: column; padding: 10px; }
-        .chat-msg { margin-bottom: 8px; padding: 8px 12px; border-radius: 12px; background: #f1f1f1; font-size: 0.82rem; }
+        .chat-msg { margin-bottom: 8px; padding: 8px 12px; border-radius: 12px; background: #f1f1f1; font-size: 0.82rem; position: relative; }
         .chat-msg b { color: #007bff; display: block; font-size: 0.72rem; }
         .chat-msg.pedido-log { background: #fff4e5; border-left: 3px solid #ffa000; }
+        .chat-time { font-size: 0.65rem; color: #999; float: right; margin-top: 2px; }
         #chat-input-area { display: flex; background: white; border-radius: 0 0 15px 15px; border-top: 1px solid #ddd; padding: 8px; }
         #chat-toggle { width: 100%; border-radius: 20px; font-weight: bold; margin-top: 5px; }
 
@@ -231,12 +231,18 @@
                 </div>
             </div>
 
-            <!-- FILTROS ADMIN AGREGADOS -->
+            <!-- FILTROS ADMIN MODIFICADOS Y CORREGIDOS -->
             <div class="admin-header-controls row g-3 mb-4">
-                <div class="col-md-6">
+                <div class="col-md-3">
                     <div class="modern-input-group mb-0">
                         <i class="bi bi-search modern-input-icon"></i>
                         <input type="text" id="adminSearchOperator" class="modern-input" placeholder="Filtrar por Operador..." onkeyup="filterAdminReports()">
+                    </div>
+                </div>
+                <div class="col-md-3">
+                    <div class="modern-input-group mb-0">
+                        <i class="bi bi-calendar-event modern-input-icon"></i>
+                        <input type="date" id="adminSearchDate" class="modern-input" onchange="filterAdminReports()">
                     </div>
                 </div>
                 <div class="col-md-3">
@@ -374,7 +380,16 @@
                 const data = snap.val();
                 if(data) Object.values(data).sort((a,b) => a.timestamp - b.timestamp).forEach(m => {
                     const isPedido = m.text.includes("NUEVO PEDIDO");
-                    box.innerHTML += `<div class="chat-msg ${isPedido?'pedido-log':''}"><b>${m.user}</b>${m.text}</div>`;
+                    const timeStr = new Date(m.timestamp).toLocaleTimeString([], {hour: '2-digit', minute:'2-digit'});
+                    // Si es pedido de oficina, mostramos fecha y hora completa
+                    const detailTime = isPedido ? `<div style="font-size:0.65rem; color: #777; margin-bottom:4px;">${new Date(m.timestamp).toLocaleString()}</div>` : '';
+                    box.innerHTML += `
+                        <div class="chat-msg ${isPedido?'pedido-log':''}">
+                            <span class="chat-time">${timeStr}</span>
+                            <b>${m.user}</b>
+                            ${detailTime}
+                            ${m.text}
+                        </div>`;
                 });
                 box.scrollTop = box.scrollHeight;
             });
@@ -495,8 +510,12 @@
             };
 
             await push(ref(db, 'pedidos_diarios'), pedidoObj);
-            // REGISTRO EN CHAT PEDIDOS
-            await push(ref(db, 'pedidos_chat'), { user: 'SISTEMA', text: `📢 NUEVO PEDIDO: ${resumen}. Obs: ${pedidoObj.obs}`, timestamp: Date.now() });
+            // REGISTRO EN CHAT PEDIDOS - FIGURAR FECHA Y HORA
+            await push(ref(db, 'pedidos_chat'), { 
+                user: 'SISTEMA', 
+                text: `📢 NUEVO PEDIDO: ${resumen}. Obs: ${pedidoObj.obs}`, 
+                timestamp: Date.now() 
+            });
             
             alert("Pedido enviado correctamente");
             selectedPedidosOficina = {};
@@ -599,8 +618,16 @@
             });
         }
 
+        // ALERTA STOCK 0 PARA FACU O JAVIER - CORRECCIÓN PARA BLOQUEAR SUMA
         window.changeRepQty = (id, delta) => {
             if(!selectedRepuestos[id]) selectedRepuestos[id] = { name: globalItems[id].name, qty: 0 };
+            
+            // Si intenta sumar (delta > 0) y no hay stock, alerta y DETIENE la función (return)
+            if(delta > 0 && globalItems[id].qty <= 0) {
+                alert("SIN STOCK DE " + globalItems[id].name);
+                return; // ESTO EVITA QUE SE SUME 1 EN EL FRONTEND
+            }
+
             selectedRepuestos[id].qty = Math.max(0, selectedRepuestos[id].qty + delta);
             document.getElementById(`rq-${id}`).innerText = selectedRepuestos[id].qty;
             document.getElementById(`rs-${id}`).classList.toggle('active', selectedRepuestos[id].qty > 0);
@@ -684,7 +711,6 @@
             });
         }
 
-        // --- FUNCION MODIFICADA PARA PERMITIR CARGA DIRECTA ---
         function renderItem(id, item) {
             let canEdit = false;
             let isSuperUser = (currentUser === 'admin' || currentUser === 'Facu');
@@ -713,7 +739,6 @@
             document.getElementById('itemsContainer').appendChild(card);
         }
 
-        // Función para establecer stock directo (Punto 2)
         window.setStockDirect = async (id, newVal, name, oldVal) => {
             const val = parseInt(newVal);
             if(isNaN(val) || val < 0) return;
@@ -732,7 +757,6 @@
             if(cur + amt < 0) return;
             const nuevoTotal = cur + amt;
             update(ref(db, `items/${id}`), { qty: nuevoTotal });
-            // Modificado para mostrar stock real (Punto 3)
             push(ref(db, 'history'), { 
                 type: 'manual', 
                 user: currentUser.toUpperCase(), 
@@ -744,7 +768,6 @@
 
         // --- HISTORIALES ---
         function loadTallerHistory() {
-            // ELIMINADO EL LÍMITE DE 12 PARA VER TODO EL HISTORIAL
             onValue(ref(db, 'taller_reports'), snap => {
                 const list = document.getElementById('tallerHistoryList'); list.innerHTML = '';
                 const data = snap.val(); if(!data) return;
@@ -752,7 +775,6 @@
                     const i = data[key];
                     const div = document.createElement('div');
                     div.className = "history-box taller taller-item-row";
-                    // Data attributes para el filtro
                     div.setAttribute('data-search', `${i.operator} ${i.machine} ${i.date}`.toLowerCase());
                     div.innerHTML = `<b>${i.operator}</b> - ${i.machine}<br><small>${i.date}</small>`;
                     div.onclick = () => {
@@ -771,11 +793,8 @@
         };
 
         window.loadHistory = () => {
-            // ELIMINADO limitToLast(50) PARA VER TODO EL HISTORIAL DE MOVIMIENTOS
             onValue(ref(db, 'history'), snap => {
                 const cont = document.getElementById('historyContainer');
-                
-                // Agregamos barra de búsqueda para el historial si no existe
                 if(!document.getElementById('historySearch')) {
                     cont.innerHTML = `
                         <div class="modern-input-group mb-3">
@@ -784,11 +803,9 @@
                         </div>
                         <div id="historyItemsList"></div>`;
                 }
-                
                 const listCont = document.getElementById('historyItemsList');
                 listCont.innerHTML = '';
                 const data = snap.val(); if(!data) return;
-                
                 Object.values(data).sort((a,b) => b.timestamp - a.timestamp).forEach(l => {
                     let descDisplay = l.desc;
                     let stockBadge = "";
@@ -806,7 +823,6 @@
             });
         }
 
-        // Nueva función para filtrar el historial extendido
         window.filterHistoryList = () => {
             const term = document.getElementById('historySearch').value.toLowerCase();
             document.querySelectorAll('.history-item-entry').forEach(row => {
@@ -826,7 +842,7 @@
             tbody.innerHTML = '';
             if(!data) return;
             Object.values(data).sort((a,b) => b.timestamp - a.timestamp).forEach(i => {
-                tbody.innerHTML += `<tr class="report-row" data-operator="${i.operator.toLowerCase()}" style="cursor:pointer" onclick="this.style.background='#f0f0f0'">
+                tbody.innerHTML += `<tr class="report-row" data-operator="${i.operator.toLowerCase()}" data-date="${i.date}" style="cursor:pointer" onclick="this.style.background='#f0f0f0'">
                     <td>${i.date}</td>
                     <td>${i.operator}</td>
                     <td>${i.machine}</td>
@@ -837,10 +853,33 @@
             });
         }
 
+        // CORRECCIÓN FINAL FILTRO ADMIN POR FECHA Y OPERADOR
         window.filterAdminReports = () => {
-            const term = document.getElementById('adminSearchOperator').value.toLowerCase();
+            const termOp = document.getElementById('adminSearchOperator').value.toLowerCase();
+            const termDate = document.getElementById('adminSearchDate').value; // Formato YYYY-MM-DD del input date
+            
             document.querySelectorAll('.report-row').forEach(row => {
-                row.style.display = row.dataset.operator.includes(term) ? '' : 'none';
+                const rowOp = row.dataset.operator;
+                const rowDateText = row.dataset.date; // Ejemplo: "7/5/2026 11:44" o "07/05/2026 11:44"
+                
+                let matchDate = true;
+                if(termDate) {
+                    const datePart = rowDateText.split(' ')[0]; // Sacamos la hora, queda "7/5/2026"
+                    const p = datePart.split('/'); // Separamos día, mes, año
+                    if(p.length === 3) {
+                        // Formateamos para comparar con el input (YYYY-MM-DD) asegurando ceros a la izquierda
+                        const dd = p[0].padStart(2, '0');
+                        const mm = p[1].padStart(2, '0');
+                        const yyyy = p[2];
+                        const formattedRowDate = `${yyyy}-${mm}-${dd}`;
+                        matchDate = (formattedRowDate === termDate);
+                    } else {
+                        matchDate = false;
+                    }
+                }
+
+                const matchOp = rowOp.includes(termOp);
+                row.style.display = (matchOp && matchDate) ? '' : 'none';
             });
         };
 
