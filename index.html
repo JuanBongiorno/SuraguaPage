@@ -11,8 +11,111 @@
     
     <!-- Vinculación con el archivo CSS -->
     <link rel="stylesheet" href="style.css">
+
+    <!-- ESTILOS ADICIONALES PARA LAS NUEVAS SECCIONES -->
+    <style>
+        /* Navbar Styles */
+        .navbar-main {
+            position: fixed;
+            top: 0;
+            width: 100%;
+            background: rgba(255, 255, 255, 0.95);
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 15px 50px;
+            z-index: 1000;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+        }
+        .navbar-main .nav-links {
+            display: flex;
+            list-style: none;
+            gap: 25px;
+        }
+        .navbar-main .nav-links a {
+            text-decoration: none;
+            color: #333;
+            font-weight: 600;
+            font-size: 14px;
+            transition: 0.3s;
+        }
+        .navbar-main .nav-links a:hover { color: #007bff; }
+
+        /* Nueva Sección Normativas Promo */
+        .normativas-promo {
+            padding: 80px 0;
+            background: #fff;
+        }
+        .promo-container {
+            display: grid;
+            grid-template-columns: 1fr 1fr 1fr;
+            align-items: center;
+            gap: 30px;
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 20px;
+        }
+        .promo-text { text-align: left; }
+        .promo-img img { width: 100%; border-radius: 10px; box-shadow: 0 10px 20px rgba(0,0,0,0.1); }
+        .promo-btn { text-align: center; }
+
+        /* Sección Cobertura */
+        .cobertura {
+            padding: 80px 0;
+            background: #f4f7f6;
+        }
+        .cobertura-grid {
+            display: flex;
+            gap: 50px;
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 20px;
+        }
+        .cobertura-lista { flex: 1; }
+        .cobertura-lista ul {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            list-style: none;
+            gap: 15px;
+            padding: 0;
+        }
+        .cobertura-lista li {
+            padding: 10px;
+            background: white;
+            border-radius: 5px;
+            box-shadow: 2px 2px 5px rgba(0,0,0,0.05);
+            font-weight: 500;
+        }
+        .cobertura-mapa {
+            flex: 1;
+            background: #e0e0e0;
+            border-radius: 15px;
+            min-height: 400px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            overflow: hidden;
+            border: 3px solid #fff;
+        }
+        .cobertura-mapa img { width: 100%; height: 100%; object-fit: cover; }
+
+        /* Espaciado para el inicio por el navbar fijo */
+        .hero { margin-top: 60px; }
+    </style>
 </head>
 <body>
+
+    <!-- NAVBAR (NUEVO) -->
+    <nav class="navbar-main">
+        <div class="logo-nav" style="font-weight: 700; color: #00468b; font-size: 24px;">SURAGUA</div>
+        <ul class="nav-links">
+            <li><a href="#">Inicio</a></li>
+            <li><a href="#acerca">Acerca de</a></li>
+            <li><a href="historia.html">Historia</a></li>
+            <li><a href="normativas.html">Normativas</a></li>
+            <li><a href="#contacto">Contacto</a></li>
+        </ul>
+    </nav>
 
     <!-- BOTÓN FLOTANTE WHATSAPP -->
     <a href="https://wa.me/5491100000000" class="whatsapp-float" target="_blank">
@@ -21,15 +124,12 @@
 
     <!-- SECCIÓN INICIO (HERO) -->
     <section class="hero">
-        <!-- VIDEO DE FONDO OPTIMIZADO -->
-        <!-- IMPORTANTE: poster="poster-video.jpg" es la imagen que se ve antes de que el video arranque -->
         <video autoplay muted loop playsinline preload="auto" poster="poster-video.jpg" class="hero-video">
             <source src="Video Project nuevo.mp4" type="video/mp4">
             Tu navegador no soporta video.
         </video>
 
         <div class="hero-content">
-            <!-- LOGO SURAGUA -->
             <img src="LOGOV3 sin fondo.png" alt="Suragua Logo" class="hero-logo">
             <p>Líderes en hidratación para comercios y empresas.</p>
             <a href="#acerca" class="btn-conocenos">CONÓCENOS</a>
@@ -41,7 +141,7 @@
     <p class="carousel-title">Empresas que confían en nosotros</p>
     <div class="slider">
         <div class="slide-track">
-            <!-- PRIMER SET DE LOGOS (9 marcas) -->
+            <!-- Logos omitidos por brevedad, se mantienen igual que tu original -->
             <div class="slide"><img src="ceamse-logo-png_seeklogo-185581.png" alt="CEAMSE"></div>
             <div class="slide"><img src="river-plate-logo-png_seeklogo-369569.png" alt="RIVER PLATE"></div>
             <div class="slide"><img src="TELEFE LOGO.png" alt="TELEFE"></div>
@@ -51,8 +151,6 @@
             <div class="slide"><img src="Toyota-logo-500x281.png" alt="TOYOTA"></div>
             <div class="slide"><img src="Telefonica-Logo-.png" alt="TELEFONICA"></div>
             <div class="slide"><img src="NACION.jpg" alt="MINISTERIO DE SALUD"></div>
-
-            <!-- SEGUNDO SET IDÉNTICO -->
             <div class="slide"><img src="ceamse-logo-png_seeklogo-185581.png" alt="CEAMSE"></div>
             <div class="slide"><img src="river-plate-logo-png_seeklogo-369569.png" alt="RIVER PLATE"></div>
             <div class="slide"><img src="TELEFE LOGO.png" alt="TELEFE"></div>
@@ -75,6 +173,60 @@
                 <p>Desde 1991 brindamos un servicio confiable, eficiente y de calidad, reconocido por empresas en todo Buenos Aires.</p>
                 <p>Nuestros productos cumplen con todas las normas de seguridad e higiene avaladas por <strong>ISO-9001 e ISO-14001.</strong></p>
                 <p>Nuestra misión es ofrecer agua pura y segura, superando las expectativas de nuestros clientes con responsabilidad y compromiso ambiental.</p>
+                
+                <!-- BOTÓN NUEVO: HISTORIA -->
+                <div style="text-align: center; margin-top: 30px;">
+                    <a href="historia.html" class="btn-conocenos" style="background-color: #00468b;">NUESTRA HISTORIA</a>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- NUEVA SECCIÓN: NORMATIVAS PROMO -->
+    <section class="normativas-promo">
+        <div class="promo-container">
+            <div class="promo-text">
+                <h3>Calidad Certificada</h3>
+                <p>Cumplimos con los más altos estándares internacionales para garantizar la pureza de cada gota que llega a tu empresa.</p>
+            </div>
+            <div class="promo-btn">
+                <a href="normativas.html" class="btn-conocenos"> NORMATIVAS</a>
+            </div>
+            <div class="promo-img">
+                <img src="https://images.unsplash.com/photo-1581091226825-a6a2a5aee158?auto=format&fit=crop&q=80&w=500" alt="Normativas Calidad">
+            </div>
+        </div>
+    </section>
+
+    <!-- NUEVA SECCIÓN: ZONAS DE COBERTURA -->
+    <section class="cobertura">
+        <div class="container">
+            <h2 style="text-align: center; margin-bottom: 40px;">ZONAS DE COBERTURA</h2>
+            <div class="cobertura-grid">
+                <div class="cobertura-lista">
+                    <h3>Nuestras Localidades</h3>
+                    <ul>
+                        <li><i class="fas fa-check-circle"></i> Zona 1</li>
+                        <li><i class="fas fa-check-circle"></i> Zona 2</li>
+                        <li><i class="fas fa-check-circle"></i> Zona 3</li>
+                        <li><i class="fas fa-check-circle"></i> Zona 4</li>
+                        <li><i class="fas fa-check-circle"></i> Zona 5</li>
+                        <li><i class="fas fa-check-circle"></i> Zona 6</li>
+                        <li><i class="fas fa-check-circle"></i> Zona 7</li>
+                        <li><i class="fas fa-check-circle"></i> Zona 8</li>
+                        <li><i class="fas fa-check-circle"></i> Zona 9</li>
+                        <li><i class="fas fa-check-circle"></i> Zona 10</li>
+                        <li><i class="fas fa-check-circle"></i> Zona 11</li>
+                        <li><i class="fas fa-check-circle"></i> Zona 12</li>
+                        <li><i class="fas fa-check-circle"></i> Zona 13</li>
+                        <li><i class="fas fa-check-circle"></i> Zona 14</li>
+                        <li><i class="fas fa-check-circle"></i> Zona 15</li>
+                    </ul>
+                </div>
+                <div class="cobertura-mapa">
+                    <!-- Imagen de mapa personalizada -->
+                    <img src="https://images.unsplash.com/photo-1526778548025-fa2f459cd5c1?auto=format&fit=crop&q=80&w=800" alt="Mapa de cobertura Suragua">
+                </div>
             </div>
         </div>
     </section>
