@@ -9,10 +9,12 @@
     <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@300;400;600;700&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
     
+    <!-- MAPA INTERACTIVO (LEAFLET CSS) -->
+    <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
+
     <!-- Vinculación con el archivo CSS -->
     <link rel="stylesheet" href="style.css">
 
-    <!-- ESTILOS ADICIONALES PARA LAS NUEVAS SECCIONES -->
     <style>
         /* Navbar Styles */
         .navbar-main {
@@ -41,25 +43,7 @@
         }
         .navbar-main .nav-links a:hover { color: #007bff; }
 
-        /* Nueva Sección Normativas Promo */
-        .normativas-promo {
-            padding: 80px 0;
-            background: #fff;
-        }
-        .promo-container {
-            display: grid;
-            grid-template-columns: 1fr 1fr 1fr;
-            align-items: center;
-            gap: 30px;
-            max-width: 1200px;
-            margin: 0 auto;
-            padding: 0 20px;
-        }
-        .promo-text { text-align: left; }
-        .promo-img img { width: 100%; border-radius: 10px; box-shadow: 0 10px 20px rgba(0,0,0,0.1); }
-        .promo-btn { text-align: center; }
-
-        /* Sección Cobertura */
+        /* Cobertura */
         .cobertura {
             padding: 80px 0;
             background: #f4f7f6;
@@ -85,27 +69,38 @@
             border-radius: 5px;
             box-shadow: 2px 2px 5px rgba(0,0,0,0.05);
             font-weight: 500;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            border-left: 4px solid transparent;
         }
-        .cobertura-mapa {
-            flex: 1;
-            background: #e0e0e0;
-            border-radius: 15px;
-            min-height: 400px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            overflow: hidden;
-            border: 3px solid #fff;
+        .cobertura-lista li:hover {
+            background: #00468b;
+            color: white;
+            transform: translateX(10px);
+            border-left: 4px solid #00d4ff;
         }
-        .cobertura-mapa img { width: 100%; height: 100%; object-fit: cover; }
 
-        /* Espaciado para el inicio por el navbar fijo */
+        /* CONTENEDOR DEL MAPA REAL */
+        #map {
+            flex: 1;
+            height: 500px;
+            border-radius: 15px;
+            border: 3px solid #fff;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.1);
+            z-index: 1; /* Para que no tape al navbar */
+        }
+
+        /* Espaciado por el navbar fijo */
         .hero { margin-top: 60px; }
+        
+        /* Ajuste para el video y contenido existente */
+        .normativas-promo { padding: 80px 0; background: #fff; }
+        .promo-container { display: grid; grid-template-columns: 1fr 1fr 1fr; align-items: center; gap: 30px; max-width: 1200px; margin: 0 auto; padding: 0 20px; }
+        .promo-img img { width: 100%; border-radius: 10px; }
     </style>
 </head>
 <body>
 
-    <!-- NAVBAR (NUEVO) -->
     <nav class="navbar-main">
         <div class="logo-nav" style="font-weight: 700; color: #00468b; font-size: 24px;">SURAGUA</div>
         <ul class="nav-links">
@@ -117,18 +112,15 @@
         </ul>
     </nav>
 
-    <!-- BOTÓN FLOTANTE WHATSAPP -->
     <a href="https://wa.me/5491100000000" class="whatsapp-float" target="_blank">
         <i class="fab fa-whatsapp"></i>
     </a>
 
-    <!-- SECCIÓN INICIO (HERO) -->
     <section class="hero">
         <video autoplay muted loop playsinline preload="auto" poster="poster-video.jpg" class="hero-video">
             <source src="Video Project nuevo.mp4" type="video/mp4">
             Tu navegador no soporta video.
         </video>
-
         <div class="hero-content">
             <img src="LOGOV3 sin fondo.png" alt="Suragua Logo" class="hero-logo">
             <p>Líderes en hidratación para comercios y empresas.</p>
@@ -136,45 +128,40 @@
         </div>
     </section>
 
-<!-- CARRUSEL DE EMPRESAS -->
-<div class="carousel-container">
-    <p class="carousel-title">Empresas que confían en nosotros</p>
-    <div class="slider">
-        <div class="slide-track">
-            <!-- Logos omitidos por brevedad, se mantienen igual que tu original -->
-            <div class="slide"><img src="ceamse-logo-png_seeklogo-185581.png" alt="CEAMSE"></div>
-            <div class="slide"><img src="river-plate-logo-png_seeklogo-369569.png" alt="RIVER PLATE"></div>
-            <div class="slide"><img src="TELEFE LOGO.png" alt="TELEFE"></div>
-            <div class="slide"><img src="agea1.jpg" alt="AGEA"></div>
-            <div class="slide"><img src="12670_167-Benito-Roggio-logo-300x300.jpg" alt="BENITO ROGGIO"></div>
-            <div class="slide"><img src="logo_molinos.jpg" alt="MOLINO CAÑUELAS"></div>
-            <div class="slide"><img src="Toyota-logo-500x281.png" alt="TOYOTA"></div>
-            <div class="slide"><img src="Telefonica-Logo-.png" alt="TELEFONICA"></div>
-            <div class="slide"><img src="NACION.jpg" alt="MINISTERIO DE SALUD"></div>
-            <div class="slide"><img src="ceamse-logo-png_seeklogo-185581.png" alt="CEAMSE"></div>
-            <div class="slide"><img src="river-plate-logo-png_seeklogo-369569.png" alt="RIVER PLATE"></div>
-            <div class="slide"><img src="TELEFE LOGO.png" alt="TELEFE"></div>
-            <div class="slide"><img src="agea1.jpg" alt="AGEA"></div>
-            <div class="slide"><img src="12670_167-Benito-Roggio-logo-300x300.jpg" alt="BENITO ROGGIO"></div>
-            <div class="slide"><img src="logo_molinos.jpg" alt="MOLINO CAÑUELAS"></div>
-            <div class="slide"><img src="Toyota-logo-500x281.png" alt="TOYOTA"></div>
-            <div class="slide"><img src="Telefonica-Logo-.png" alt="TELEFONICA"></div>
-            <div class="slide"><img src="NACION.jpg" alt="MINISTERIO DE SALUD"></div>
+    <!-- CARRUSEL -->
+    <div class="carousel-container">
+        <p class="carousel-title">Empresas que confían en nosotros</p>
+        <div class="slider">
+            <div class="slide-track">
+                <div class="slide"><img src="ceamse-logo-png_seeklogo-185581.png" alt="CEAMSE"></div>
+                <div class="slide"><img src="river-plate-logo-png_seeklogo-369569.png" alt="RIVER PLATE"></div>
+                <div class="slide"><img src="TELEFE LOGO.png" alt="TELEFE"></div>
+                <div class="slide"><img src="agea1.jpg" alt="AGEA"></div>
+                <div class="slide"><img src="12670_167-Benito-Roggio-logo-300x300.jpg" alt="BENITO ROGGIO"></div>
+                <div class="slide"><img src="logo_molinos.jpg" alt="MOLINO CAÑUELAS"></div>
+                <div class="slide"><img src="Toyota-logo-500x281.png" alt="TOYOTA"></div>
+                <div class="slide"><img src="Telefonica-Logo-.png" alt="TELEFONICA"></div>
+                <div class="slide"><img src="NACION.jpg" alt="MINISTERIO DE SALUD"></div>
+                <!-- Duplicados -->
+                <div class="slide"><img src="ceamse-logo-png_seeklogo-185581.png" alt="CEAMSE"></div>
+                <div class="slide"><img src="river-plate-logo-png_seeklogo-369569.png" alt="RIVER PLATE"></div>
+                <div class="slide"><img src="TELEFE LOGO.png" alt="TELEFE"></div>
+                <div class="slide"><img src="agea1.jpg" alt="AGEA"></div>
+                <div class="slide"><img src="12670_167-Benito-Roggio-logo-300x300.jpg" alt="BENITO ROGGIO"></div>
+                <div class="slide"><img src="logo_molinos.jpg" alt="MOLINO CAÑUELAS"></div>
+                <div class="slide"><img src="Toyota-logo-500x281.png" alt="TOYOTA"></div>
+                <div class="slide"><img src="Telefonica-Logo-.png" alt="TELEFONICA"></div>
+                <div class="slide"><img src="NACION.jpg" alt="MINISTERIO DE SALUD"></div>
+            </div>
         </div>
     </div>
-</div>
 
-    <!-- SECCIÓN ACERCA DE NOSOTROS -->
     <section id="acerca" class="acerca">
         <div class="container">
             <h2>ACERCA DE NOSOTROS</h2>
             <div class="acerca-content">
-                <p>Somos una <strong>empresa argentina con más de 30 años de experiencia</strong> en la producción, distribución y comercialización de <strong>agua envasada en botellones y dispensers frío/calor.</strong></p>
-                <p>Desde 1991 brindamos un servicio confiable, eficiente y de calidad, reconocido por empresas en todo Buenos Aires.</p>
-                <p>Nuestros productos cumplen con todas las normas de seguridad e higiene avaladas por <strong>ISO-9001 e ISO-14001.</strong></p>
-                <p>Nuestra misión es ofrecer agua pura y segura, superando las expectativas de nuestros clientes con responsabilidad y compromiso ambiental.</p>
-                
-                <!-- BOTÓN NUEVO: HISTORIA -->
+                <p>Somos una <strong>empresa argentina con más de 30 años de experiencia</strong>...</p>
+                <p>Desde 1991 brindamos un servicio confiable en todo Buenos Aires.</p>
                 <div style="text-align: center; margin-top: 30px;">
                     <a href="historia.html" class="btn-conocenos" style="background-color: #00468b;">NUESTRA HISTORIA</a>
                 </div>
@@ -182,202 +169,159 @@
         </div>
     </section>
 
-    <!-- NUEVA SECCIÓN: NORMATIVAS PROMO -->
     <section class="normativas-promo">
         <div class="promo-container">
             <div class="promo-text">
                 <h3>Calidad Certificada</h3>
-                <p>Cumplimos con los más altos estándares internacionales para garantizar la pureza de cada gota que llega a tu empresa.</p>
+                <p>Cumplimos con ISO-9001 e ISO-14001.</p>
             </div>
             <div class="promo-btn">
                 <a href="normativas.html" class="btn-conocenos"> NORMATIVAS</a>
             </div>
             <div class="promo-img">
-                <img src="https://images.unsplash.com/photo-1581091226825-a6a2a5aee158?auto=format&fit=crop&q=80&w=500" alt="Normativas Calidad">
+                <img src="https://images.unsplash.com/photo-1581091226825-a6a2a5aee158?auto=format&fit=crop&q=80&w=500" alt="Normativas">
             </div>
         </div>
     </section>
 
-    <!-- NUEVA SECCIÓN: ZONAS DE COBERTURA -->
+    <!-- SECCIÓN COBERTURA CON MAPA TIPO GOOGLE MAPS -->
     <section class="cobertura">
         <div class="container">
             <h2 style="text-align: center; margin-bottom: 40px;">ZONAS DE COBERTURA</h2>
             <div class="cobertura-grid">
                 <div class="cobertura-lista">
-                    <h3>Nuestras Localidades</h3>
-                    <ul>
-                        <li><i class="fas fa-check-circle"></i> Zona 1</li>
-                        <li><i class="fas fa-check-circle"></i> Zona 2</li>
-                        <li><i class="fas fa-check-circle"></i> Zona 3</li>
-                        <li><i class="fas fa-check-circle"></i> Zona 4</li>
-                        <li><i class="fas fa-check-circle"></i> Zona 5</li>
-                        <li><i class="fas fa-check-circle"></i> Zona 6</li>
-                        <li><i class="fas fa-check-circle"></i> Zona 7</li>
-                        <li><i class="fas fa-check-circle"></i> Zona 8</li>
-                        <li><i class="fas fa-check-circle"></i> Zona 9</li>
-                        <li><i class="fas fa-check-circle"></i> Zona 10</li>
-                        <li><i class="fas fa-check-circle"></i> Zona 11</li>
-                        <li><i class="fas fa-check-circle"></i> Zona 12</li>
-                        <li><i class="fas fa-check-circle"></i> Zona 13</li>
-                        <li><i class="fas fa-check-circle"></i> Zona 14</li>
-                        <li><i class="fas fa-check-circle"></i> Zona 15</li>
+                    <h3>Selecciona tu ubicación</h3>
+                    <ul id="lista-zonas">
+                        <li onclick="irAZona('centro')"><i class="fas fa-map-marker-alt"></i> CABA Centro</li>
+                        <li onclick="irAZona('palermo')"><i class="fas fa-map-marker-alt"></i> Palermo / Belgrano</li>
+                        <li onclick="irAZona('vlopez')"><i class="fas fa-map-marker-alt"></i> Vicente López</li>
+                        <li onclick="irAZona('sisidro')"><i class="fas fa-map-marker-alt"></i> San Isidro</li>
+                        <li onclick="irAZona('tigre')"><i class="fas fa-map-marker-alt"></i> Tigre</li>
+                        <li onclick="irAZona('smartin')"><i class="fas fa-map-marker-alt"></i> San Martín</li>
+                        <li onclick="irAZona('moron')"><i class="fas fa-map-marker-alt"></i> Morón / Castelar</li>
+                        <li onclick="irAZona('ramos')"><i class="fas fa-map-marker-alt"></i> Ramos Mejía</li>
+                        <li onclick="irAZona('avellaneda')"><i class="fas fa-map-marker-alt"></i> Avellaneda</li>
+                        <li onclick="irAZona('quilmes')"><i class="fas fa-map-marker-alt"></i> Quilmes</li>
+                        <li onclick="irAZona('lomas')"><i class="fas fa-map-marker-alt"></i> Lomas de Zamora</li>
+                        <li onclick="irAZona('lanus')"><i class="fas fa-map-marker-alt"></i> Lanús</li>
+                        <li onclick="irAZona('laplata')"><i class="fas fa-map-marker-alt"></i> La Plata</li>
+                        <li onclick="irAZona('pilar')"><i class="fas fa-map-marker-alt"></i> Pilar</li>
+                        <li onclick="irAZona('escobar')"><i class="fas fa-map-marker-alt"></i> Escobar</li>
                     </ul>
                 </div>
-                <div class="cobertura-mapa">
-                    <!-- Imagen de mapa personalizada -->
-                    <img src="https://images.unsplash.com/photo-1526778548025-fa2f459cd5c1?auto=format&fit=crop&q=80&w=800" alt="Mapa de cobertura Suragua">
-                </div>
+                <!-- EL MAPA REAL SE CARGA AQUÍ -->
+                <div id="map"></div>
             </div>
         </div>
     </section>
 
-    <!-- SECCIÓN PRODUCTOS: BIDONES -->
+    <!-- PRODUCTOS -->
     <section id="productos" class="productos">
         <div class="container">
             <span class="tag">Nuestros Productos</span>
             <h2>Bidones de Agua</h2>
             <div class="grid-productos">
-                <div class="card">
-                    <img src="./b20.png" alt="Bidón 20L">
-                    <h3>Bidón 20 Litros</h3>
-                    <p>Máximo rendimiento para empresas.</p>
-                </div>
-                <div class="card">
-                    <img src="./b12.png" alt="Bidón 12L">
-                    <h3>Bidón 12 Litros</h3>
-                    <p>El equilibrio perfecto entre capacidad y facilidad de carga.</p>
-                </div>
-                <div class="card">
-                    <img src="./b8.png" alt="Bidón 8L">
-                    <h3>Bidón 8 Litros</h3>
-                    <p>Compacto e ideal para dispensers de mesa o espacios chicos.</p>
-                </div>
+                <div class="card"><img src="./b20.png" alt="Bidón 20L"><h3>Bidón 20 Litros</h3></div>
+                <div class="card"><img src="./b12.png" alt="Bidón 12L"><h3>Bidón 12 Litros</h3></div>
+                <div class="card"><img src="./b8.png" alt="Bidón 8L"><h3>Bidón 8 Litros</h3></div>
             </div>
         </div>
     </section>
 
-    <!-- SECCIÓN PRODUCTOS: DISPENSERS -->
-    <section class="productos bg-white">
-        <div class="container">
-            <h2>Nuestros Dispensers</h2>
-            <div class="grid-productos">
-                <div class="card alt">
-                    <img src="./dispenser red.png" alt="Dispenser de Red">
-                    <h3>Dispenser de Red</h3>
-                    <p>Conexión directa con filtros de carbón activado. Agua purificada infinita.</p>
-                </div>
-                <div class="card alt">
-                    <img src="./dispenser v1 (1).png" alt="Dispenser a Bidón">
-                    <h3>Dispenser a Bidón</h3>
-                    <p>Sistema Frío/Calor de alta recuperación para botellones de 12 y 20L.</p>
-                </div>
-                <div class="card alt">
-                    <img src="./HOGAREÑO.png" alt="Hogareño">
-                    <h3>Dispenser de agua natural</h3>
-                    <p>Disfrutá de agua fresca y natural en cualquier momento con este práctico dispenser de sobremesa</p>
-                </div>
-            </div>
-        </div>
-    </section>
-
-    <!-- SECCIÓN ANÁLISIS Y CALIDAD -->
-    <section class="analisis">
-        <div class="container">
-            <h2>Control de Calidad y Análisis</h2>
-            <p>Mantenemos la transparencia total. Aquí puedes consultar nuestros informes actualizados.</p>
-            <div class="grid-analisis">
-                <div class="item-analisis">
-                    <i class="fas fa-file-medical"></i>
-                    <h4>Análisis Bacteriológico</h4>
-                    <p>Garantizamos la ausencia total de microorganismos nocivos.</p>
-                    <a href="./Bacteriologico Abril.pdf" class="btn-descarga">Ver Reporte</a>
-                </div>
-                <div class="item-analisis">
-                    <i class="fas fa-microscope"></i>
-                    <h4>Análisis Físico-Químico</h4>
-                    <p>Control de minerales y PH para asegurar el sabor y la pureza.</p>
-                    <a href="./134691 fq pdf.pdf" class="btn-descarga">Ver Reporte</a>
-                </div>
-            </div>
-        </div>
-    </section>
-
-    <!-- SECCIÓN CONTACTO -->
+    <!-- CONTACTO -->
     <section id="contacto" class="contacto">
         <div class="container">
             <div class="contacto-wrapper">
                 <div class="contacto-info">
                     <h2>Contáctanos</h2>
-                    <p>¿Interesado en nuestros servicios para tu empresa u hogar? Envíanos un correo ahora.</p>
-                    <div class="email-directo">
-                        <i class="fas fa-envelope"></i> logistica@suragua.com.ar
-                    </div>
+                    <p>logistica@suragua.com.ar</p>
                 </div>
                 <form class="contacto-form" id="miFormulario" action="https://formspree.io/f/mnjwbjev" method="POST">
-                    <input type="text" name="nombre" placeholder="Nombre completo" required>
-                    <input type="email" name="email" placeholder="Correo electrónico" required>
-                    <textarea name="mensaje" placeholder="¿En qué podemos ayudarte?" rows="4" required></textarea>
-                    <button type="submit" class="btn-enviar" id="botonEnviar">ENVIAR CONSULTA</button>
-                    <!-- Mensaje de éxito oculto -->
-                    <p id="mensajeExito" style="display:none; color: #28a745; font-weight: bold; margin-top: 10px;">
-                        ¡Gracias! Tu mensaje ha sido enviado con éxito.
-                    </p>
+                    <input type="text" name="nombre" placeholder="Nombre" required>
+                    <input type="email" name="email" placeholder="Correo" required>
+                    <textarea name="mensaje" placeholder="Mensaje" rows="4"></textarea>
+                    <button type="submit" class="btn-enviar" id="botonEnviar">ENVIAR</button>
+                    <p id="mensajeExito" style="display:none; color: #28a745;">¡Enviado con éxito!</p>
                 </form>
             </div>
         </div>
     </section>
 
-    <!-- FOOTER -->
     <footer>
-        <div class="footer-content">
-            <div class="footer-logo">Suragua</div>
-            <div class="social-links">
-                <a href="https://www.facebook.com/suragua/?locale=es_LA"><i class="fab fa-facebook-f"></i></a>
-                <a href="https://www.instagram.com/suragua/"><i class="fab fa-instagram"></i></a>
-                <a href="#"><i class="fab fa-youtube"></i></a>
-            </div>
-            <p>&copy; 2024 Suragua - Argentina. Todos los derechos reservados.</p>
-        </div>
+        <p>&copy; 2024 Suragua - Argentina.</p>
     </footer>
 
+    <!-- MAPA REAL (LEAFLET JS) -->
+    <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
+    
     <script>
+        // 1. INICIALIZAR EL MAPA centrado en Buenos Aires
+        var map = L.map('map').setView([-34.6037, -58.3816], 10);
+
+        // 2. CARGAR CAPA DE DISEÑO (OpenStreetMap)
+        L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+            attribution: '© OpenStreetMap'
+        }).addTo(map);
+
+        // 3. BASE DE DATOS DE COORDENADAS DE ZONAS
+        var zonas = {
+            'centro': { coords: [-34.6037, -58.3816], nombre: 'CABA Centro' },
+            'palermo': { coords: [-34.5711, -58.4233], nombre: 'Palermo / Belgrano' },
+            'vlopez': { coords: [-34.5223, -58.4750], nombre: 'Vicente López' },
+            'sisidro': { coords: [-34.4719, -58.5276], nombre: 'San Isidro' },
+            'tigre': { coords: [-34.4251, -58.5796], nombre: 'Tigre' },
+            'smartin': { coords: [-34.5779, -58.5381], nombre: 'San Martín' },
+            'moron': { coords: [-34.6515, -58.6226], nombre: 'Morón / Castelar' },
+            'ramos': { coords: [-34.6425, -58.5639], nombre: 'Ramos Mejía' },
+            'avellaneda': { coords: [-34.6611, -58.3644], nombre: 'Avellaneda' },
+            'quilmes': { coords: [-34.7245, -58.2520], nombre: 'Quilmes' },
+            'lomas': { coords: [-34.7588, -58.4022], nombre: 'Lomas de Zamora' },
+            'lanus': { coords: [-34.7003, -58.3962], nombre: 'Lanús' },
+            'laplata': { coords: [-34.9215, -57.9545], nombre: 'La Plata' },
+            'pilar': { coords: [-34.4581, -58.9142], nombre: 'Pilar' },
+            'escobar': { coords: [-34.3408, -58.7905], nombre: 'Escobar' }
+        };
+
+        // Guardar marcadores en un objeto para abrirlos después
+        var marcadores = {};
+
+        // Agregar todos los marcadores al mapa inicialmente
+        for (var key in zonas) {
+            var z = zonas[key];
+            var m = L.marker(z.coords).addTo(map).bindPopup("<b>" + z.nombre + "</b><br>Zona de Cobertura Suragua");
+            marcadores[key] = m;
+        }
+
+        // Función para mover el mapa al hacer click en la lista
+        function irAZona(key) {
+            var z = zonas[key];
+            map.flyTo(z.coords, 13); // Hace el efecto de "vuelo" como Google Maps
+            marcadores[key].openPopup(); // Abre el cartelito
+        }
+
+        // SCRIPT FORMULARIO (AJAX)
         const $form = document.querySelector('#miFormulario');
         const $button = document.querySelector('#botonEnviar');
         const $mensaje = document.querySelector('#mensajeExito');
 
-        $form.addEventListener('submit', handleSubmit);
-
-        async function handleSubmit(event) {
-            event.preventDefault(); // Esto evita que la página se recargue o redirija
-            
+        $form.addEventListener('submit', async function(event) {
+            event.preventDefault(); 
             $button.innerText = 'Enviando...';
             $button.disabled = true;
-
             const form = new FormData(this);
             const response = await fetch(this.action, {
                 method: this.method,
                 body: form,
-                headers: {
-                    'Accept': 'application/json'
-                }
+                headers: { 'Accept': 'application/json' }
             });
-
             if (response.ok) {
-                this.reset(); // Limpia el formulario
-                $button.innerText = 'ENVIAR CONSULTA';
+                this.reset(); 
+                $button.innerText = 'ENVIAR';
                 $button.disabled = false;
-                $mensaje.style.display = 'block'; // Muestra el texto de éxito
-                
-                // Ocultar el mensaje de éxito después de 5 segundos
-                setTimeout(() => {
-                    $mensaje.style.display = 'none';
-                }, 5000);
-            } else {
-                alert('Huy, algo salió mal. Por favor intenta de nuevo.');
-                $button.disabled = false;
-                $button.innerText = 'ENVIAR CONSULTA';
+                $mensaje.style.display = 'block'; 
+                setTimeout(() => { $mensaje.style.display = 'none'; }, 5000);
             }
-        }
+        });
     </script>
 
 </body>
