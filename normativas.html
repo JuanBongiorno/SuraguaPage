@@ -2,42 +2,77 @@
 <html lang="es">
 <head>
     <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Normativas de Calidad - Suragua</title>
     <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;700&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="style.css">
     <style>
-        body { font-family: 'Montserrat', sans-serif; line-height: 1.6; }
+        body { font-family: 'Montserrat', sans-serif; line-height: 1.6; background-color: #f4f7f6; background-image: url(./fono33.jpg); background-repeat: no-repeat; background-size: cover;}
         .normas-section { padding: 100px 20px; max-width: 900px; margin: 0 auto; }
-        .norma-card { background: #f9f9f9; padding: 30px; border-left: 5px solid #00468b; margin-bottom: 20px; }
+
+        .header-box { background: #00468b; color: white; padding: 40px; border-radius: 15px; text-align: center; margin-bottom: 40px; }
+        .header-box h1 { font-size: 26px; font-weight: 700; margin: 0; }
+
+        .proceso-card { background: white; padding: 40px; border-radius: 15px; box-shadow: 0 10px 20px rgba(0,0,0,0.05); margin-bottom: 30px; }
+        .proceso-card h3 { color: #00468b; border-bottom: 2px solid #00d4ff; display: inline-block; margin-bottom: 20px; }
+        
+        .paso { margin-bottom: 20px; padding-left: 20px; border-left: 3px solid #00468b; }
+        .paso strong { color: #00468b; font-size: 1.1em; }
+
+        .norma-card { background: #eef2f7; padding: 30px; border-radius: 10px; margin-bottom: 20px; }
+        .norma-card h2 { color: #00468b; font-size: 20px; }
+
         .video-container { width: 100%; max-width: 1000px; margin: 50px auto; aspect-ratio: 16/9; }
         iframe { width: 100%; height: 100%; border-radius: 15px; }
         .back-btn { display: inline-block; padding: 10px 20px; background: #00468b; color: white; text-decoration: none; border-radius: 5px; margin-bottom: 20px;}
+        
+        @media (max-width: 768px) {
+            .normas-section { padding: 60px 15px; }
+            .header-box h1 { font-size: 20px; }
+            .proceso-card { padding: 20px; }
+        }
     </style>
 </head>
 <body>
     <div class="normas-section">
         <a href="index.html" class="back-btn">← Volver al Inicio</a>
-        <h1>Nuestras Certificaciones de Calidad</h1>
+        
+        <div class="header-box">
+            <h1>Agua segura, pura y certificada: tecnología, ciencia y compromiso en cada gota</h1>
+        </div>
+
+        <div class="proceso-card">
+            <h3>Nuestro Proceso</h3>
+            <div class="paso">
+                <p>1. El agua atraviesa un sistema de <strong>filtrado por arenas</strong>, que retiene las <strong>impurezas más gruesas y finas</strong>.</p>
+            </div>
+            <div class="paso">
+                <p>2. Luego pasa por un <strong>filtro de carbón activado</strong> que <strong>elimina el cloro y mejora el sabor</strong>.</p>
+            </div>
+            <div class="paso">
+                <p>3. Se somete a <strong>rayos ultravioletas</strong>, que <strong>eliminan microorganismos, virus y bacterias</strong>.</p>
+            </div>
+            <div class="paso">
+                <p>4. Los <strong>iones de plata</strong> otorgan <strong>mayor durabilidad</strong>, manteniendo el agua pura por más tiempo.</p>
+            </div>
+            <div class="paso">
+                <p>5. Finalmente, la <strong>ozonización</strong> asegura un <strong>agua cristalina, libre de olores y con baja concentración de sales</strong>.</p>
+            </div>
+            <p style="margin-top: 20px; font-weight: 600;">Cada etapa garantiza la más alta calidad, cumpliendo con normas ISO-9001 e ISO-14001.</p>
+        </div>
         
         <div class="norma-card">
-            <h2>ISO 9001:2015</h2>
-            <p>Esta normativa internacional se enfoca en la gestión de la calidad. En Suragua, garantiza que todos nuestros procesos de embotellado y atención al cliente cumplen con estándares de excelencia técnica y mejora continua.</p>
+            <h2>ISO 9001 - Gestión de Calidad</h2>
+            <p>Asegura que todos nuestros procesos productivos cumplen con los más altos estándares internacionales, garantizando la satisfacción del cliente en cada entrega.</p>
         </div>
 
         <div class="norma-card">
-            <h2>ISO 14001:2015</h2>
-            <p>Certifica nuestro compromiso con el medio ambiente. Gestionamos nuestros residuos, optimizamos el uso del agua y reducimos nuestra huella de carbono en la distribución de bidones por todo Buenos Aires.</p>
+            <h2>ISO 14001 - Compromiso Ambiental</h2>
+            <p>Certifica nuestra gestión responsable de recursos, minimizando el impacto ambiental en nuestra planta y optimizando el ciclo de vida de nuestros envases.</p>
         </div>
 
-        <!-- VIDEO DE YOUTUBE (En bucle, sin sonido, sin controles) -->
         <div class="video-container">
-            <iframe 
-                src="https://www.youtube.com/embed/ScMzIvxBSi4?autoplay=1&mute=1&loop=1&playlist=ScMzIvxBSi4&controls=0" 
-                title="Procesos Suragua" 
-                frameborder="0" 
-                allow="autoplay; encrypted-media" 
-                allowfullscreen>
-            </iframe>
+            <iframe src="https://www.youtube.com/watch?v=j9jdlM149G4" title="Procesos Suragua" frameborder="0" allow="autoplay; encrypted-media" allowfullscreen></iframe>
         </div>
     </div>
 </body>

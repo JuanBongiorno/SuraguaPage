@@ -26,7 +26,7 @@
             justify-content: space-between;
             align-items: center;
             padding: 15px 50px;
-            z-index: 1000;
+            z-index: 2000;
             box-shadow: 0 2px 10px rgba(0,0,0,0.1);
         }
         .navbar-main .nav-links {
@@ -43,6 +43,20 @@
         }
         .navbar-main .nav-links a:hover { color: #007bff; }
 
+        /* MENU HAMBURGUESA */
+        .menu-toggle {
+            display: none;
+            flex-direction: column;
+            cursor: pointer;
+            gap: 5px;
+        }
+        .menu-toggle span {
+            width: 25px;
+            height: 3px;
+            background: #00468b;
+            transition: 0.3s;
+        }
+
         /* Cobertura */
         .cobertura {
             padding: 80px 0;
@@ -56,6 +70,19 @@
             padding: 0 20px;
         }
         .cobertura-lista { flex: 1; }
+        
+        /* SELECTOR PARA MOVIL */
+        .zona-select-mobile {
+            display: none;
+            width: 100%;
+            padding: 15px;
+            border-radius: 8px;
+            border: 2px solid #00468b;
+            font-family: 'Montserrat';
+            font-weight: 600;
+            margin-bottom: 20px;
+        }
+
         .cobertura-lista ul {
             display: grid;
             grid-template-columns: 1fr 1fr;
@@ -80,14 +107,16 @@
             border-left: 4px solid #00d4ff;
         }
 
-        /* CONTENEDOR DEL MAPA REAL */
+        /* CONTENEDOR DEL MAPA REAL - ARREGLO DEL BORDE */
         #map {
             flex: 1;
             height: 500px;
+            min-height: 400px;
             border-radius: 15px;
-            border: 3px solid #fff;
+            border: 3px solid #fff !important; 
             box-shadow: 0 10px 30px rgba(0,0,0,0.1);
-            z-index: 1; /* Para que no tape al navbar */
+            z-index: 1; 
+            background: #eee;
         }
 
         /* Espaciado por el navbar fijo */
@@ -97,13 +126,69 @@
         .normativas-promo { padding: 80px 0; background: #fff; }
         .promo-container { display: grid; grid-template-columns: 1fr 1fr 1fr; align-items: center; gap: 30px; max-width: 1200px; margin: 0 auto; padding: 0 20px; }
         .promo-img img { width: 100%; border-radius: 10px; }
+
+        /* ARREGLO IMAGENES BIDONES QUE SE CORTAN */
+        .grid-productos .card img {
+            width: 100%;
+            height: auto;
+            max-height: 380px;
+            object-fit: contain;
+            display: block;
+            margin: 0 auto;
+        }
+
+        /* RESPONSIVE MOBILE - ARREGLOS FINALES */
+        @media (max-width: 768px) {
+            .navbar-main { padding: 15px 20px; }
+            .menu-toggle { display: flex; }
+            .navbar-main .nav-links {
+                display: none;
+                flex-direction: column;
+                position: absolute;
+                top: 60px;
+                left: 0;
+                width: 100%;
+                background: white;
+                padding: 20px;
+                box-shadow: 0 5px 10px rgba(0,0,0,0.1);
+            }
+            .navbar-main .nav-links.active { display: flex; }
+            
+            .cobertura-grid { 
+                display: block !important; 
+                padding: 0 15px;
+            }
+            .cobertura-lista ul { display: none; }
+            .zona-select-mobile { display: block; }
+
+            /* MAPA VISIBLE EN CELULAR */
+            #map { 
+                height: 350px !important; 
+                width: 100% !important; 
+                display: block !important; 
+                visibility: visible !important;
+                margin-top: 30px;
+                border: 3px solid #fff !important;
+            }
+            
+            .grid-productos .card img {
+                max-height: 280px;
+            }
+        }
     </style>
 </head>
 <body>
 
     <nav class="navbar-main">
         <div class="logo-nav" style="font-weight: 700; color: #00468b; font-size: 24px;">SURAGUA</div>
-        <ul class="nav-links">
+        
+        <div class="menu-toggle" id="mobile-menu">
+            <span></span>
+            <span></span>
+            <span></span>
+        </div>
+
+        <ul class="nav-links" id="nav-list">
             <li><a href="#">Inicio</a></li>
             <li><a href="#acerca">Acerca de</a></li>
             <li><a href="historia.html">Historia</a></li>
@@ -222,13 +307,34 @@
     </section>
 
 
-    <!-- SECCIÓN COBERTURA CON MAPA TIPO GOOGLE MAPS -->
+    <!-- SECCIÓN COBERTURA -->
     <section class="cobertura">
         <div class="container">
             <h2 style="text-align: center; margin-bottom: 40px;">ZONAS DE COBERTURA</h2>
             <div class="cobertura-grid">
                 <div class="cobertura-lista">
                     <h3>Selecciona tu ubicación</h3>
+                    
+                    <!-- SELECTOR QUE SOLO APARECE EN MOVIL -->
+                    <select class="zona-select-mobile" onchange="irAZona(this.value)">
+                        <option value="">Seleccionar Localidad...</option>
+                        <option value="centro">CABA Centro</option>
+                        <option value="palermo">Palermo / Belgrano</option>
+                        <option value="vlopez">Vicente López</option>
+                        <option value="sisidro">San Isidro</option>
+                        <option value="tigre">Tigre</option>
+                        <option value="smartin">San Martín</option>
+                        <option value="moron">Morón / Castelar</option>
+                        <option value="ramos">Ramos Mejía</option>
+                        <option value="avellaneda">Avellaneda</option>
+                        <option value="quilmes">Quilmes</option>
+                        <option value="lomas">Lomas de Zamora</option>
+                        <option value="lanus">Lanús</option>
+                        <option value="laplata">La Plata</option>
+                        <option value="pilar">Pilar</option>
+                        <option value="escobar">Escobar</option>
+                    </select>
+
                     <ul id="lista-zonas">
                         <li onclick="irAZona('centro')"><i class="fas fa-map-marker-alt"></i> CABA Centro</li>
                         <li onclick="irAZona('palermo')"><i class="fas fa-map-marker-alt"></i> Palermo / Belgrano</li>
@@ -247,13 +353,10 @@
                         <li onclick="irAZona('escobar')"><i class="fas fa-map-marker-alt"></i> Escobar</li>
                     </ul>
                 </div>
-                <!-- EL MAPA REAL SE CARGA AQUÍ -->
                 <div id="map"></div>
             </div>
         </div>
     </section>
-
-
 
     <!-- CONTACTO -->
     <section id="contacto" class="contacto">
@@ -282,6 +385,14 @@
     <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
     
     <script>
+        // SCRIPT PARA MENU HAMBURGUESA
+        const mobileMenu = document.getElementById('mobile-menu');
+        const navLinks = document.getElementById('nav-list');
+
+        mobileMenu.addEventListener('click', () => {
+            navLinks.classList.toggle('active');
+        });
+
         // 1. INICIALIZAR EL MAPA centrado en Buenos Aires
         var map = L.map('map').setView([-34.6037, -58.3816], 10);
 
@@ -321,22 +432,32 @@
              'tortuguitas': { coords: [-34.4750, -58.7594], nombre: 'Tortuguitas' },
         };
 
-        // Guardar marcadores en un objeto para abrirlos después
         var marcadores = {};
 
-        // Agregar todos los marcadores al mapa inicialmente
         for (var key in zonas) {
             var z = zonas[key];
             var m = L.marker(z.coords).addTo(map).bindPopup("<b>" + z.nombre + "</b><br>Zona de Cobertura Suragua");
             marcadores[key] = m;
         }
 
-        // Función para mover el mapa al hacer click en la lista
         function irAZona(key) {
+            if(!key) return;
             var z = zonas[key];
-            map.flyTo(z.coords, 13); // Hace el efecto de "vuelo" como Google Maps
-            marcadores[key].openPopup(); // Abre el cartelito
+            
+            // Forzar actualización de tamaño del mapa para móviles
+            map.invalidateSize(); 
+            
+            map.flyTo(z.coords, 13);
+            setTimeout(() => { marcadores[key].openPopup(); }, 300);
+            
+            // Si es movil, scrollear al mapa para que se vea el resultado
+            if(window.innerWidth < 768) {
+                document.getElementById('map').scrollIntoView({ behavior: 'smooth', block: 'center' });
+            }
         }
+
+        // Asegurar renderizado al cargar
+        window.addEventListener('load', () => { setTimeout(() => { map.invalidateSize(); }, 500); });
 
         // SCRIPT FORMULARIO (AJAX)
         const $form = document.querySelector('#miFormulario');
@@ -362,6 +483,5 @@
             }
         });
     </script>
-
 </body>
 </html>

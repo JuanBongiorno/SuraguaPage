@@ -2,22 +2,58 @@
 <html lang="es">
 <head>
     <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Nuestra Historia - Suragua</title>
     <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;700&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="style.css">
     <style>
-        .historia-container { padding: 100px 20px; max-width: 800px; margin: 0 auto; text-align: center; }
-        .historia-text { text-align: justify; margin-top: 30px; font-size: 18px; color: #444; }
+        .historia-container { padding: 100px 20px; max-width: 1000px; margin: 0 auto; }
+        .historia-text { text-align: justify; margin-top: 30px; font-size: 18px; color: #444; line-height: 1.8; }
+        .historia-text h1 { color: #00468b; text-align: center; margin-bottom: 40px; }
+        
+        /* Galería Estética */
+        .historia-galeria {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 20px;
+            margin-top: 50px;
+        }
+        .foto-historia {
+            width: 100%;
+            height: 250px;
+            object-fit: cover;
+            border-radius: 10px;
+            box-shadow: 0 4px 10px rgba(0,0,0,0.1);
+            transition: 0.3s;
+            border: 5px solid white;
+        }
+        .foto-historia:hover { transform: scale(1.03); }
+
         .back-btn { display: inline-block; padding: 10px 20px; background: #00468b; color: white; text-decoration: none; border-radius: 5px; margin-bottom: 20px;}
+        
+        @media (max-width: 768px) {
+            .historia-container { padding: 60px 15px; }
+            .historia-text { font-size: 16px; }
+            .foto-historia { height: 200px; }
+        }
     </style>
 </head>
 <body>
     <div class="historia-container">
         <a href="index.html" class="back-btn">← Volver al Inicio</a>
-        <h1>Nuestra Historia</h1>
         <div class="historia-text">
+            <h1>Nuestra Historia</h1>
             <p>Suragua nació en 1991 como un pequeño emprendimiento familiar con la visión de profesionalizar la distribución de agua envasada en Buenos Aires. A lo largo de tres décadas, hemos crecido junto a nuestros clientes, desde las primeras entregas barriales hasta convertirnos en proveedores estratégicos de las empresas más grandes del país.</p>
             <p>Nuestra planta ha sido pionera en la implementación de sistemas de filtrado por ósmosis inversa y ozonización, garantizando un producto libre de impurezas. Hoy, con más de 30 años de trayectoria, seguimos manteniendo los mismos valores de confianza y puntualidad que nos dieron origen.</p>
+        </div>
+
+        <div class="historia-galeria">
+            <img src="foto-vieja1.jpg" class="foto-historia" alt="Historia 1">
+            <img src="foto-vieja2.jpg" class="foto-historia" alt="Historia 2">
+            <img src="foto-vieja3.jpg" class="foto-historia" alt="Historia 3">
+            <img src="foto-vieja4.jpg" class="foto-historia" alt="Historia 4">
+            <img src="foto-vieja5.jpg" class="foto-historia" alt="Historia 5">
+            <img src="foto-vieja6.jpg" class="foto-historia" alt="Historia 6">
         </div>
     </div>
 </body>
