@@ -64,12 +64,21 @@
         }
         .cobertura-grid {
             display: flex;
-            gap: 50px;
+            flex-direction: column;
+            gap: 40px;
             max-width: 1200px;
             margin: 0 auto;
             padding: 0 20px;
         }
-        .cobertura-lista { flex: 1; }
+        
+        /* En pantallas grandes, lista y mapa lado a lado */
+        @media (min-width: 992px) {
+            .cobertura-grid {
+                flex-direction: row;
+            }
+        }
+
+        .cobertura-lista { flex: 1.5; }
         
         /* SELECTOR PARA MOVIL */
         .zona-select-mobile {
@@ -83,31 +92,36 @@
             margin-bottom: 20px;
         }
 
+        /* LISTA ORGANIZADA EN 3 COLUMNAS PARA AHORRAR ESPACIO */
         .cobertura-lista ul {
             display: grid;
-            grid-template-columns: 1fr 1fr;
+            grid-template-columns: repeat(3, 1fr);
             list-style: none;
-            gap: 15px;
+            gap: 10px;
             padding: 0;
         }
         .cobertura-lista li {
-            padding: 10px;
+            padding: 8px 12px;
             background: white;
             border-radius: 5px;
             box-shadow: 2px 2px 5px rgba(0,0,0,0.05);
             font-weight: 500;
+            font-size: 13px;
             cursor: pointer;
             transition: all 0.3s ease;
             border-left: 4px solid transparent;
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
         }
         .cobertura-lista li:hover {
             background: #00468b;
             color: white;
-            transform: translateX(10px);
+            transform: translateY(-2px);
             border-left: 4px solid #00d4ff;
         }
 
-        /* CONTENEDOR DEL MAPA REAL - ARREGLO DEL BORDE */
+        /* CONTENEDOR DEL MAPA REAL */
         #map {
             flex: 1;
             height: 500px;
@@ -137,7 +151,11 @@
             margin: 0 auto;
         }
 
-        /* RESPONSIVE MOBILE - ARREGLOS FINALES */
+        /* RESPONSIVE MOBILE */
+        @media (max-width: 991px) {
+            .cobertura-lista ul { grid-template-columns: repeat(2, 1fr); }
+        }
+
         @media (max-width: 768px) {
             .navbar-main { padding: 15px 20px; }
             .menu-toggle { display: flex; }
@@ -154,25 +172,13 @@
             }
             .navbar-main .nav-links.active { display: flex; }
             
-            .cobertura-grid { 
-                display: block !important; 
-                padding: 0 15px;
-            }
             .cobertura-lista ul { display: none; }
             .zona-select-mobile { display: block; }
 
-            /* MAPA VISIBLE EN CELULAR */
             #map { 
                 height: 350px !important; 
                 width: 100% !important; 
-                display: block !important; 
-                visibility: visible !important;
-                margin-top: 30px;
-                border: 3px solid #fff !important;
-            }
-            
-            .grid-productos .card img {
-                max-height: 280px;
+                margin-top: 10px;
             }
         }
     </style>
@@ -315,7 +321,7 @@
                 <div class="cobertura-lista">
                     <h3>Selecciona tu ubicación</h3>
                     
-                    <!-- SELECTOR QUE SOLO APARECE EN MOVIL -->
+                    <!-- SELECTOR MÓVIL (CORREGIDO Y ACTUALIZADO) -->
                     <select class="zona-select-mobile" onchange="irAZona(this.value)">
                         <option value="">Seleccionar Localidad...</option>
                         <option value="centro">CABA Centro</option>
@@ -333,24 +339,48 @@
                         <option value="laplata">La Plata</option>
                         <option value="pilar">Pilar</option>
                         <option value="escobar">Escobar</option>
+                        <option value="sanjusto">San Justo</option>
+                        <option value="polvorines">Los Polvorines</option>
+                        <option value="palomar">El Palomar</option>
+                        <option value="moreno">Moreno</option>
+                        <option value="merlo">Merlo</option>
+                        <option value="grodriguez">Gral. Rodríguez</option>
+                        <option value="gcatan">González Catán</option>
+                        <option value="laferrere">Laferrère</option>
+                        <option value="haedo">Haedo</option>
+                        <option value="ituzaingo">Ituzaingó</option>
+                        <option value="zarate">Zárate</option>
+                        <option value="tortuguitas">Tortuguitas</option>
                     </select>
 
                     <ul id="lista-zonas">
                         <li onclick="irAZona('centro')"><i class="fas fa-map-marker-alt"></i> CABA Centro</li>
-                        <li onclick="irAZona('palermo')"><i class="fas fa-map-marker-alt"></i> Palermo / Belgrano</li>
+                        <li onclick="irAZona('palermo')"><i class="fas fa-map-marker-alt"></i> Palermo</li>
                         <li onclick="irAZona('vlopez')"><i class="fas fa-map-marker-alt"></i> Vicente López</li>
                         <li onclick="irAZona('sisidro')"><i class="fas fa-map-marker-alt"></i> San Isidro</li>
                         <li onclick="irAZona('tigre')"><i class="fas fa-map-marker-alt"></i> Tigre</li>
                         <li onclick="irAZona('smartin')"><i class="fas fa-map-marker-alt"></i> San Martín</li>
-                        <li onclick="irAZona('moron')"><i class="fas fa-map-marker-alt"></i> Morón / Castelar</li>
+                        <li onclick="irAZona('moron')"><i class="fas fa-map-marker-alt"></i> Morón</li>
                         <li onclick="irAZona('ramos')"><i class="fas fa-map-marker-alt"></i> Ramos Mejía</li>
                         <li onclick="irAZona('avellaneda')"><i class="fas fa-map-marker-alt"></i> Avellaneda</li>
                         <li onclick="irAZona('quilmes')"><i class="fas fa-map-marker-alt"></i> Quilmes</li>
-                        <li onclick="irAZona('lomas')"><i class="fas fa-map-marker-alt"></i> Lomas de Zamora</li>
+                        <li onclick="irAZona('lomas')"><i class="fas fa-map-marker-alt"></i> Lomas</li>
                         <li onclick="irAZona('lanus')"><i class="fas fa-map-marker-alt"></i> Lanús</li>
                         <li onclick="irAZona('laplata')"><i class="fas fa-map-marker-alt"></i> La Plata</li>
                         <li onclick="irAZona('pilar')"><i class="fas fa-map-marker-alt"></i> Pilar</li>
                         <li onclick="irAZona('escobar')"><i class="fas fa-map-marker-alt"></i> Escobar</li>
+                        <li onclick="irAZona('sanjusto')"><i class="fas fa-map-marker-alt"></i> San Justo</li>
+                        <li onclick="irAZona('polvorines')"><i class="fas fa-map-marker-alt"></i> Polvorines</li>
+                        <li onclick="irAZona('palomar')"><i class="fas fa-map-marker-alt"></i> El Palomar</li>
+                        <li onclick="irAZona('moreno')"><i class="fas fa-map-marker-alt"></i> Moreno</li>
+                        <li onclick="irAZona('merlo')"><i class="fas fa-map-marker-alt"></i> Merlo</li>
+                        <li onclick="irAZona('grodriguez')"><i class="fas fa-map-marker-alt"></i> Gral. Rodríguez</li>
+                        <li onclick="irAZona('gcatan')"><i class="fas fa-map-marker-alt"></i> G. Catán</li>
+                        <li onclick="irAZona('laferrere')"><i class="fas fa-map-marker-alt"></i> Laferrère</li>
+                        <li onclick="irAZona('haedo')"><i class="fas fa-map-marker-alt"></i> Haedo</li>
+                        <li onclick="irAZona('ituzaingo')"><i class="fas fa-map-marker-alt"></i> Ituzaingó</li>
+                        <li onclick="irAZona('zarate')"><i class="fas fa-map-marker-alt"></i> Zárate</li>
+                        <li onclick="irAZona('tortuguitas')"><i class="fas fa-map-marker-alt"></i> Tortuguitas</li>
                     </ul>
                 </div>
                 <div id="map"></div>
@@ -393,15 +423,14 @@
             navLinks.classList.toggle('active');
         });
 
-        // 1. INICIALIZAR EL MAPA centrado en Buenos Aires
+        // 1. INICIALIZAR EL MAPA
         var map = L.map('map').setView([-34.6037, -58.3816], 10);
 
-        // 2. CARGAR CAPA DE DISEÑO (OpenStreetMap)
         L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
             attribution: '© OpenStreetMap'
         }).addTo(map);
 
-        // 3. BASE DE DATOS DE COORDENADAS DE ZONAS
+        // 2. BASE DE DATOS COMPLETA
         var zonas = {
             'centro': { coords: [-34.6037, -58.3816], nombre: 'CABA Centro' },
             'palermo': { coords: [-34.5711, -58.4233], nombre: 'Palermo / Belgrano' },
@@ -420,16 +449,16 @@
             'escobar': { coords: [-34.3408, -58.7905], nombre: 'Escobar' },
             'sanjusto': { coords: [-34.6800, -58.5583], nombre: 'San Justo' },
             'polvorines': { coords: [-34.5025, -58.7025], nombre: 'Los Polvorines' },
-             'palomar': { coords: [-34.6133, -58.5911], nombre: 'El Palomar' },
-             'moreno': { coords: [-34.6508, -58.7908], nombre: 'Moreno' },
-             'merlo': { coords: [-34.6653, -58.7275], nombre: 'Merlo' },
-             'grodriguez': { coords: [-34.6078, -58.9542], nombre: 'General Rodríguez' },
-             'gcatan': { coords: [-34.7675, -58.6253], nombre: 'González Catán' },
-             'laferrere': { coords: [-34.7508, -58.5839], nombre: 'Gregorio de Laferrère' },
-             'haedo': { coords: [-34.6444, -58.5447], nombre: 'Haedo' },
-             'ituzaingo': { coords: [-34.6586, -58.6669], nombre: 'Ituzaingó' },
-             'zarate': { coords: [-34.0981, -59.0286], nombre: 'Zárate' },
-             'tortuguitas': { coords: [-34.4750, -58.7594], nombre: 'Tortuguitas' },
+            'palomar': { coords: [-34.6133, -58.5911], nombre: 'El Palomar' },
+            'moreno': { coords: [-34.6508, -58.7908], nombre: 'Moreno' },
+            'merlo': { coords: [-34.6653, -58.7275], nombre: 'Merlo' },
+            'grodriguez': { coords: [-34.6078, -58.9542], nombre: 'General Rodríguez' },
+            'gcatan': { coords: [-34.7675, -58.6253], nombre: 'González Catán' },
+            'laferrere': { coords: [-34.7508, -58.5839], nombre: 'Gregorio de Laferrère' },
+            'haedo': { coords: [-34.6444, -58.5447], nombre: 'Haedo' },
+            'ituzaingo': { coords: [-34.6586, -58.6669], nombre: 'Ituzaingó' },
+            'zarate': { coords: [-34.0981, -59.0286], nombre: 'Zárate' },
+            'tortuguitas': { coords: [-34.4750, -58.7594], nombre: 'Tortuguitas' },
         };
 
         var marcadores = {};
@@ -440,26 +469,23 @@
             marcadores[key] = m;
         }
 
+        // FUNCIÓN CORREGIDA (Capitalización corregida en HTML)
         function irAZona(key) {
-            if(!key) return;
+            if(!key || !zonas[key]) return;
             var z = zonas[key];
             
-            // Forzar actualización de tamaño del mapa para móviles
             map.invalidateSize(); 
-            
             map.flyTo(z.coords, 13);
             setTimeout(() => { marcadores[key].openPopup(); }, 300);
             
-            // Si es movil, scrollear al mapa para que se vea el resultado
             if(window.innerWidth < 768) {
                 document.getElementById('map').scrollIntoView({ behavior: 'smooth', block: 'center' });
             }
         }
 
-        // Asegurar renderizado al cargar
         window.addEventListener('load', () => { setTimeout(() => { map.invalidateSize(); }, 500); });
 
-        // SCRIPT FORMULARIO (AJAX)
+        // SCRIPT FORMULARIO
         const $form = document.querySelector('#miFormulario');
         const $button = document.querySelector('#botonEnviar');
         const $mensaje = document.querySelector('#mensajeExito');
