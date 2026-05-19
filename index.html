@@ -1,4 +1,6 @@
-}<!DOCTYPE html>
+--- START OF FILE Paste May 19, 2026 - 12:29PM ---
+
+<!DOCTYPE html>
 <html lang="es">
 <head>
     <meta charset="UTF-8">
@@ -391,9 +393,83 @@
         }
 
         .contacto { background-size: cover !important; }
+
+        /* ESTILOS SECCION PROCEDIMIENTOS (OCULTA) */
+        #seccion-procedimientos {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: white;
+            z-index: 9999;
+            overflow-y: auto;
+            padding: 50px 20px;
+            font-family: 'Montserrat', sans-serif;
+        }
+
+        .procedimientos-container {
+            max-width: 800px;
+            margin: 0 auto;
+            text-align: center;
+        }
+
+        .procedimientos-container h1 {
+            color: #00468b;
+            margin-bottom: 30px;
+        }
+
+        .video-placeholder {
+            width: 100%;
+            aspect-ratio: 16/9;
+            background: #000;
+            margin-bottom: 20px;
+            border-radius: 15px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+        }
+
+        .btn-volver-home {
+            display: inline-block;
+            margin-top: 40px;
+            padding: 15px 30px;
+            background: #00468b;
+            color: white;
+            text-decoration: none;
+            border-radius: 50px;
+            font-weight: 700;
+        }
     </style>
 </head>
 <body>
+
+    <!-- SECCIÓN PROCEDIMIENTOS (ESTRUCTURA SOLICITADA) -->
+    <div id="seccion-procedimientos">
+        <div class="procedimientos-container">
+            <h1>Procedimientos de Calidad</h1>
+            <p>Bienvenido a la sección exclusiva de procedimientos de Suragua. Aquí podrá encontrar el detalle técnico de nuestros procesos.</p>
+            
+            <!-- Espacio para Videos -->
+            <div class="video-placeholder">
+                <!-- Reemplazar el src con el link del video real cuando esté disponible -->
+                <p>Video instructivo 1 (Placeholder)</p>
+            </div>
+
+            <div class="video-placeholder">
+                <p>Video instructivo 2 (Placeholder)</p>
+            </div>
+
+            <div class="texto-informativo" style="text-align: left; margin-top: 30px;">
+                <h3>Protocolo de Higiene</h3>
+                <p>Detalle de los pasos realizados para la desinfección de dispensers y envases siguiendo normas internacionales.</p>
+            </div>
+
+            <a href="#" class="btn-volver-home" onclick="cerrarProcedimientos()">VOLVER AL INICIO</a>
+        </div>
+    </div>
 
     <nav class="navbar-main">
         <div class="logo-nav">
@@ -743,6 +819,28 @@
                 setTimeout(() => { $mensaje.style.display = 'none'; }, 5000);
             }
         });
+
+        // LÓGICA PARA SECCIÓN OCULTA PROCEDIMIENTOS
+        function verificarAccesoQR() {
+            if (window.location.hash === "#procedimientos") {
+                document.getElementById('seccion-procedimientos').style.display = 'block';
+                document.body.style.overflow = 'hidden'; // Evita scroll de la pagina de fondo
+            }
+        }
+
+        function cerrarProcedimientos() {
+            document.getElementById('seccion-procedimientos').style.display = 'none';
+            document.body.style.overflow = 'auto';
+            // Limpiar hash de la URL sin recargar para que no se pueda volver facilmente
+            history.replaceState(null, null, ' '); 
+            window.scrollTo(0,0);
+        }
+
+        // Ejecutar al cargar la página
+        window.addEventListener('load', verificarAccesoQR);
+        // Detectar si el hash cambia mientras la página está abierta
+        window.addEventListener('hashchange', verificarAccesoQR);
+
     </script>
 </body>
 </html>
