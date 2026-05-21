@@ -1,4 +1,4 @@
-
+--- START OF FILE Paste May 21, 2026 - 12:14PM ---
 
 <!DOCTYPE html>
 <html lang="es">
@@ -27,7 +27,7 @@
             background-size: 100% 100%; 
             background-repeat: no-repeat;
             background-attachment: scroll; 
-            min-height: 100vh; 
+            min-height: 90vh; 
             display: flex;
             align-items: flex-start; /* Alineado al inicio superior */
             justify-content: center;
@@ -67,6 +67,7 @@
             display: flex;
             list-style: none;
             gap: 25px;
+            align-items: center; /* Asegura alineación vertical con el botón */
         }
         .navbar-main .nav-links a {
             text-decoration: none;
@@ -76,6 +77,20 @@
             transition: 0.3s;
         }
         .navbar-main .nav-links a:hover { color: #007bff; }
+
+        /* NUEVO ESTILO PARA BOTON CONTACTO VERDE */
+        .navbar-main .nav-links a.btn-nav-contacto {
+            background-color: #28a745; /* Verde */
+            color: white !important;
+            padding: 10px 20px;
+            border-radius: 8px;
+            transition: all 0.3s ease;
+        }
+        .navbar-main .nav-links a.btn-nav-contacto:hover {
+            background-color: #218838; /* Verde más oscuro al pasar el mouse */
+            transform: translateY(-2px);
+            box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+        }
 
         .menu-toggle {
             display: none;
@@ -164,7 +179,7 @@
         .hero { margin-top: 60px; }
         
         /* AJUSTE SECCIÓN NORMATIVAS */
-        .normativas-promo { padding: 300px 0; background-image: url(./FONDO\ 310.jpg); background-size: cover; background-position: center;}
+        .normativas-promo { padding: 360px 0; background-image: url(./foto\ sin\ nada.png); background-size: cover; background-position: center;}
         
         /* Ajustamos las columnas para que la imagen no ocupe tanto espacio */
         .promo-container { 
@@ -487,7 +502,7 @@
             <li><a href="#acerca">Acerca de</a></li>
             <li><a href="historia.html">Historia</a></li>
             <li><a href="normativas.html">Normativas</a></li>
-            <li><a href="#contacto">Contacto</a></li>
+            <li><a href="#contacto" class="btn-nav-contacto">Contacto</a></li>
         </ul>
     </nav>
 
@@ -708,6 +723,7 @@
                         <input type="text" name="apellido" placeholder="Apellido" required>
                     </div>
                     <input type="email" name="email" placeholder="Correo electrónico" required>
+                    <input type="text" name="mensaje" placeholder="Escriba su consulta" required>
                     <textarea name="mensaje" placeholder="Consulta (Opcional)" rows="2" style="display:none;"></textarea>
                     
                     <button type="submit" class="btn-enviar" id="botonEnviar">ENVIAR MENSAJE</button>

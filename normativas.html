@@ -23,13 +23,34 @@
         .norma-card h2 { color: #00468b; font-size: 20px; }
 
         .video-container { width: 100%; max-width: 1000px; margin: 50px auto; aspect-ratio: 16/9; }
-        iframe { width: 100%; height: 100%; border-radius: 15px; }
+        /* Se unifican estilos para que el iframe o video ocupen todo el espacio */
+        .video-container iframe, .video-container video { width: 100%; height: 100%; border-radius: 15px; border: none; }
+        
         .back-btn { display: inline-block; padding: 10px 20px; background: #00468b; color: white; text-decoration: none; border-radius: 5px; margin-bottom: 20px;}
         
+        /* ESTILOS SECCIONES SOLICITADAS */
+        .servicios-visual { display: flex; align-items: center; gap: 20px; background: white; padding: 30px; border-radius: 15px; margin-bottom: 30px; flex-wrap: wrap; }
+        .servicios-col { flex: 1; min-width: 250px; }
+        .servicio-item { margin-bottom: 25px; text-align: center; }
+        .servicio-item h4 { color: #00468b; font-size: 18px; margin-bottom: 8px; }
+        .servicio-item p { font-size: 13px; color: #555; margin: 0; }
+        .dispenser-central { flex: 1; text-align: center; min-width: 250px; }
+        .dispenser-central img { max-width: 100%; height: auto; max-height: 500px; }
+
+        .purificacion-visual { background: white; padding: 40px; border-radius: 15px; margin-bottom: 30px; }
+        .purificacion-grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 30px; margin-top: 20px; }
+        .purificacion-item { text-align: center; padding: 40px; }
+        .purificacion-item img { width: 300px; height: auto; margin-bottom: 15px; }
+        .purificacion-item h4 { color: #00468b; margin-bottom: 10px; }
+        .purificacion-item p { font-size: 13px; color: #555; }
+
         @media (max-width: 768px) {
             .normas-section { padding: 60px 15px; }
             .header-box h1 { font-size: 20px; }
             .proceso-card { padding: 20px; }
+            .servicios-col { order: 2; }
+            .dispenser-central { order: 1; margin-bottom: 20px; }
+            .purificacion-grid { grid-template-columns: 1fr; }
         }
     </style>
 </head>
@@ -60,6 +81,68 @@
             </div>
             <p style="margin-top: 20px; font-weight: 600;">Cada etapa garantiza la más alta calidad, cumpliendo con normas ISO-9001 e ISO-14001.</p>
         </div>
+
+        <div class="servicios-visual">
+            <div class="servicios-col">
+                <div class="servicio-item">
+                    <h4>Experiencia</h4>
+                    <p>Contamos con más de 30 años comprometidos con acercarte La mejor Agua, saludable y segura, cumpliendo con todos los requerimientos de sanidad.</p>
+                </div>
+                <div class="servicio-item">
+                    <h4>Análisis bacteriológico</h4>
+                    <p>Realizamos el análisis todas las semanas y lo disponibilizamos a pedido de clientes.</p>
+                </div>
+                <div class="servicio-item">
+                    <h4>Formas de pago</h4>
+                    <p>Contamos con varios medios de pago: Débito automático, transferencia bancaria, cuenta cte Suragua, Mercadopago y efectivo.</p>
+                </div>
+            </div>
+
+            <div class="dispenser-central">
+                <img src="dispenser v1 (1).png" alt="Dispenser Suragua">
+            </div>
+
+            <div class="servicios-col">
+                <div class="servicio-item">
+                    <h4>Gestión telefónica y virtual</h4>
+                    <p>Consultá facturas, remitos y día de visita desde nuestra Web. Tenemos un asistencia virtual, Call Center especializado en soluciones de servicio.</p>
+                </div>
+                <div class="servicio-item">
+                    <h4>Stock cero</h4>
+                    <p>Envasamos el día anterior a la entrega para que el agua llegue fresca.</p>
+                </div>
+                <div class="servicio-item">
+                    <h4>Servicio técnico</h4>
+                    <p>Soporte y mantenimiento de los equipos para que vos puedas disfrutar siempre el mejor servicio.</p>
+                </div>
+            </div>
+        </div>
+
+        <div class="purificacion-visual">
+            <h3 style="color: #00468b; text-align: center;">Tecnología de Filtrado</h3>
+            <div class="purificacion-grid">
+                <div class="purificacion-item">
+                    <img src="TANQUE 1.png" alt="Filtrado arena">
+                    <h4>Filtrado de arena</h4>
+                    <p>El agua se filtra a través de lechos de arena para retener partículas macro y microscópicas y así obtener excelentes niveles de cristalinidad.</p>
+                </div>
+                <div class="purificacion-item">
+                    <img src="TANQUE 2.png" alt="Carbón activado">
+                    <h4>Filtrado de carbón activado</h4>
+                    <p>Luego pasa por filtros de carbón activado para eliminar el cloro y todas las partículas que le dan sabor y olor.</p>
+                </div>
+                <div class="purificacion-item">
+                    <img src="taque de filtrafo.png" alt="Filtrado micrónico">
+                    <h4>Filtrado micrónico</h4>
+                    <p>A través de distintos filtros micrónicos se retienen parásitos, bacterias y partículas en suspensión de hasta un micrón de diámetro.</p>
+                </div>
+                <div class="purificacion-item">
+                    <img src="TANQUE 3.png" alt="Ozonización">
+                    <h4>Ozonización</h4>
+                    <p>Finalmente, es ozonizada en altas concentraciones. Este proceso es de un poder bactericida 30.000 veces superior al del cloro.</p>
+                </div>
+            </div>
+        </div>
         
         <div class="norma-card">
             <h2>ISO 9001 - Gestión de Calidad</h2>
@@ -71,7 +154,6 @@
             <p>Certifica nuestra gestión responsable de recursos, minimizando el impacto ambiental en nuestra planta y optimizando el ciclo de vida de nuestros envases.</p>
         </div>
 
-         <!-- SECCIÓN ANÁLISIS Y CALIDAD -->
     <section class="analisis">
         <div class="container">
             <h2>Control de Calidad y Análisis</h2>
@@ -94,7 +176,14 @@
     </section>
 
         <div class="video-container">
-            <iframe src="https://www.youtube.com/watch?v=j9jdlM149G4" title="Procesos Suragua" frameborder="0" allow="autoplay; encrypted-media" allowfullscreen></iframe>
+            <!-- REEMPLAZA "TU_ID_AQUÍ" CON EL ID DE TU VIDEO DE YOUTUBE -->
+            <!-- Ejemplo: si el link es youtube.com/watch?v=abc123, el ID es abc123 -->
+            <iframe 
+                src="https://www.youtube.com/embed/TU_ID_AQUÍ?autoplay=1&mute=1&loop=1&playlist=TU_ID_AQUÍ&playsinline=1" 
+                title="Procesos Suragua" 
+                allow="autoplay; encrypted-media" 
+                allowfullscreen>
+            </iframe>
         </div>
     </div>
 </body>
