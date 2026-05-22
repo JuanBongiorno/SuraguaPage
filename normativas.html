@@ -8,12 +8,20 @@
     <link rel="stylesheet" href="style.css">
     <style>
         body { font-family: 'Montserrat', sans-serif; line-height: 1.6; background-image: url(./matt-hardy-6ArTTluciuA-unsplash.jpg); background-repeat: no-repeat; background-size: cover; backdrop-filter: blur(6px);}
-        .normas-section { padding: 100px 20px; max-width: 900px; margin: 0 auto; }
+        /* SECCIÓN MÁS ANCHA */
+        .normas-section { padding: 100px 20px; max-width: 1200px; margin: 0 auto; }
 
         .header-box { background: #00468b; color: white; padding: 40px; border-radius: 15px; text-align: center; margin-bottom: 40px; }
         .header-box h1 { font-size: 26px; font-weight: 700; margin: 0; }
 
         .proceso-card { background: white; padding: 40px; border-radius: 15px; box-shadow: 0 10px 20px rgba(0,0,0,0.05); margin-bottom: 30px; }
+        
+        /* CONTENEDOR PARA ALINEAR TEXTO E IMAGEN */
+        .proceso-contenedor-flex { display: flex; align-items: center; gap: 50px; flex-wrap: wrap; }
+        .proceso-texto { flex: 1.5; min-width: 300px; }
+        .proceso-foto { flex: 1; min-width: 300px; text-align: center; }
+        .proceso-foto img { width: 100%; max-width: 450px; height: auto; border-radius: 15px; }
+
         .proceso-card h3 { color: #00468b; border-bottom: 2px solid #00d4ff; display: inline-block; margin-bottom: 20px; }
         
         .paso { margin-bottom: 20px; padding-left: 20px; border-left: 3px solid #00468b; }
@@ -23,12 +31,10 @@
         .norma-card h2 { color: #00468b; font-size: 20px; }
 
         .video-container { width: 100%; max-width: 1000px; margin: 50px auto; aspect-ratio: 16/9; }
-        /* Se unifican estilos para que el iframe o video ocupen todo el espacio */
         .video-container iframe, .video-container video { width: 100%; height: 100%; border-radius: 15px; border: none; }
         
         .back-btn { display: inline-block; padding: 10px 20px; background: #00468b; color: white; text-decoration: none; border-radius: 5px; margin-bottom: 20px;}
         
-        /* ESTILOS SECCIONES SOLICITADAS */
         .servicios-visual { display: flex; align-items: center; gap: 20px; background: white; padding: 30px; border-radius: 15px; margin-bottom: 30px; flex-wrap: wrap; }
         .servicios-col { flex: 1; min-width: 250px; }
         .servicio-item { margin-bottom: 25px; text-align: center; }
@@ -51,6 +57,8 @@
             .servicios-col { order: 2; }
             .dispenser-central { order: 1; margin-bottom: 20px; }
             .purificacion-grid { grid-template-columns: 1fr; }
+            .proceso-contenedor-flex { flex-direction: column; }
+            .proceso-foto { order: -1; }
         }
     </style>
 </head>
@@ -63,23 +71,32 @@
         </div>
 
         <div class="proceso-card">
-            <h3>Nuestro Proceso</h3>
-            <div class="paso">
-                <p>1. El agua atraviesa un sistema de <strong>filtrado por arenas</strong>, que retiene las <strong>impurezas más gruesas y finas</strong>.</p>
+            <div class="proceso-contenedor-flex">
+                <div class="proceso-texto">
+                    <h3>Nuestro Proceso</h3>
+                    <div class="paso">
+                        <p>1. El agua atraviesa un sistema de <strong>filtrado por arenas</strong>, que retiene las <strong>impurezas más gruesas y finas</strong>.</p>
+                    </div>
+                    <div class="paso">
+                        <p>2. Luego pasa por un <strong>filtro de carbón activado</strong> que <strong>elimina el cloro y mejora el sabor</strong>.</p>
+                    </div>
+                    <div class="paso">
+                        <p>3. Se somete a <strong>rayos ultravioletas</strong>, que <strong>eliminan microorganismos, virus y bacterias</strong>.</p>
+                    </div>
+                    <div class="paso">
+                        <p>4. Los <strong>iones de plata</strong> otorgan <strong>mayor durabilidad</strong>, manteniendo el agua pura por más tiempo.</p>
+                    </div>
+                    <div class="paso">
+                        <p>5. Finalmente, la <strong>ozonización</strong> asegura un <strong>agua cristalina, libre de olores y con baja concentración de sales</strong>.</p>
+                    </div>
+                    <p style="margin-top: 20px; font-weight: 600;">Cada etapa garantiza la más alta calidad, cumpliendo con normas ISO-9001 e ISO-14001.</p>
+                </div>
+                
+                <div class="proceso-foto">
+                    <!-- Aquí va la imagen del bidón con los sellos ISO -->
+                    <img src="./bidon con normas.png" alt="Proceso de Calidad Suragua">
+                </div>
             </div>
-            <div class="paso">
-                <p>2. Luego pasa por un <strong>filtro de carbón activado</strong> que <strong>elimina el cloro y mejora el sabor</strong>.</p>
-            </div>
-            <div class="paso">
-                <p>3. Se somete a <strong>rayos ultravioletas</strong>, que <strong>eliminan microorganismos, virus y bacterias</strong>.</p>
-            </div>
-            <div class="paso">
-                <p>4. Los <strong>iones de plata</strong> otorgan <strong>mayor durabilidad</strong>, manteniendo el agua pura por más tiempo.</p>
-            </div>
-            <div class="paso">
-                <p>5. Finalmente, la <strong>ozonización</strong> asegura un <strong>agua cristalina, libre de olores y con baja concentración de sales</strong>.</p>
-            </div>
-            <p style="margin-top: 20px; font-weight: 600;">Cada etapa garantiza la más alta calidad, cumpliendo con normas ISO-9001 e ISO-14001.</p>
         </div>
 
         <div class="servicios-visual">
@@ -176,10 +193,8 @@
     </section>
 
         <div class="video-container">
-            <!-- REEMPLAZA "TU_ID_AQUÍ" CON EL ID DE TU VIDEO DE YOUTUBE -->
-            <!-- Ejemplo: si el link es youtube.com/watch?v=abc123, el ID es abc123 -->
             <iframe 
-                src="https://www.youtube.com/embed/TU_ID_AQUÍ?autoplay=1&mute=1&loop=1&playlist=TU_ID_AQUÍ&playsinline=1" 
+                src="https://www.youtube.com/embed/TU_ID_AQUÍ" 
                 title="Procesos Suragua" 
                 allow="autoplay; encrypted-media" 
                 allowfullscreen>
