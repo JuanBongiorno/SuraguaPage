@@ -422,7 +422,7 @@
 
         .contacto { background-size: cover !important; }
 
-        /* ESTILOS SECCION PROCEDIMIENTOS (OCULTA) */
+        /* ESTILOS SECCION PROCEDIMIENTOS (MODAL) */
         #seccion-procedimientos {
             display: none;
             position: fixed;
@@ -452,12 +452,14 @@
             width: 100%;
             aspect-ratio: 16/9;
             background: #000;
-            margin-bottom: 20px;
+            margin-bottom: 30px;
             border-radius: 15px;
             display: flex;
             align-items: center;
             justify-content: center;
             color: white;
+            overflow: hidden;
+            box-shadow: 0 10px 20px rgba(0,0,0,0.2);
         }
 
         .btn-volver-home {
@@ -470,32 +472,113 @@
             border-radius: 50px;
             font-weight: 700;
         }
+
+        /* Estilos del Timeline de Procedimientos */
+        .timeline-pasos {
+            text-align: left;
+            border-left: 4px solid #00d4ff;
+            padding-left: 30px;
+            margin-left: 20px;
+            margin-top: 40px;
+        }
+
+        .paso-item {
+            position: relative;
+            margin-bottom: 40px;
+        }
+
+        .paso-numero {
+            position: absolute;
+            left: -47px;
+            top: 0;
+            background: #00468b;
+            color: white;
+            width: 32px;
+            height: 32px;
+            border-radius: 50%;
+            text-align: center;
+            line-height: 32px;
+            font-weight: 700;
+            font-size: 16px;
+        }
+
+        .paso-item h3 {
+            color: #fcfcfc;
+            margin-bottom: 8px;
+            font-size: 20px;
+        }
+
+        .paso-item p {
+            font-size: 15px;
+            line-height: 1.6;
+            color: #444;
+        }
+
+        .paso-item strong {
+            color: #ffffff;
+        }
     </style>
 </head>
 <body>
 
-    <!-- SECCIÓN PROCEDIMIENTOS (ESTRUCTURA SOLICITADA) -->
+    <!-- SECCIÓN PROCEDIMIENTOS (MODAL DETALLADO) -->
     <div id="seccion-procedimientos">
         <div class="procedimientos-container">
-            <h1>Procedimientos de Calidad</h1>
-            <p>Bienvenido a la sección exclusiva de procedimientos de Suragua. Aquí podrá encontrar el detalle técnico de nuestros procesos.</p>
+            <h1>Procedimiento de Sanitización</h1>
+            <p>Protocolo técnico para Dispensers a Bidón. Garantía de higiene y seguridad Suragua.</p>
             
-            <!-- Espacio para Videos -->
+            <!-- Espacio para Video -->
             <div class="video-placeholder">
-                <!-- Reemplazar el src con el link del video real cuando esté disponible -->
-                <p>Video instructivo 1 (Placeholder)</p>
+                <!-- Reemplaza "tu-video.mp4" con el nombre real de tu archivo descargado -->
+                <video controls style="width: 100%; height: 100%;">
+                    <source src="./VIDEO-2026-05-28-15-23-22.mp4" type="video/mp4">
+                    Tu navegador no soporta video.
+                </video>
             </div>
 
-            <div class="video-placeholder">
-                <p>Video instructivo 2 (Placeholder)</p>
+            <!-- Listado de Procedimientos (Timeline) -->
+            <div class="timeline-pasos">
+                
+                <div class="paso-item">
+                    <div class="paso-numero">1</div>
+                    <h3>Preparación y Vaciado</h3>
+                    <p><strong>Desconexión:</strong> Se desenchufa el equipo de la corriente eléctrica por seguridad. <br>
+                    <strong>Retiro de insumos:</strong> Se saca el bidón de agua. <br>
+                    <strong>Desagote total:</strong> Se purga todo el remanente de agua abriendo las canillas.</p>
+                </div>
+
+                <div class="paso-item">
+                    <div class="paso-numero">2</div>
+                    <h3>Limpieza Interior</h3>
+                    <p><strong>Desinfección base:</strong> Se higieniza el recipiente interno pulverizando entre 3 y 5 veces un producto desinfectante aprobado (IAC) o dosificación específica de lavandina diluida. <br>
+                    <strong>Remoción manual:</strong> Con un paño 100% descartable, el técnico limpia a fondo el recipiente de agua, los conductos internos, el non-spill y el embudo. <br>
+                    <strong>Secado:</strong> Se deja reposar unos minutos para permitir la evaporación completa del producto.</p>
+                </div>
+
+                <div class="paso-item">
+                    <div class="paso-numero">3</div>
+                    <h3>Limpieza Exterior y Componentes</h3>
+                    <p><strong>Chasis completo:</strong> Se pulveriza el exterior de 5 a 7 veces con sanitizante y se repasa toda la superficie con un paño nuevo descartable. <br>
+                    <strong>Canillas y conductos:</strong> Se remueven las canillas para lavarlas individualmente. Los conductos se limpian por dentro utilizando un cepillo de cerdas embebido en el producto desinfectante.</p>
+                </div>
+
+                <div class="paso-item">
+                    <div class="paso-numero">4</div>
+                    <h3>Enjuague de Seguridad (Barrido)</h3>
+                    <p><strong>Eliminación de residuos:</strong> Se introducen aproximadamente 10 litros de agua filtrada en el recipiente limpio. <br>
+                    <strong>Purga final:</strong> Se vuelve a desagotar por completo a través de las canillas para asegurar que no quede ningún rastro o sabor del químico sanitizante.</p>
+                </div>
+
+                <div class="paso-item">
+                    <div class="paso-numero">5</div>
+                    <h3 style="color: #28a745;">Control de Calidad y Registro</h3>
+                    <p><strong>Higiene garantizada:</strong> Todo el proceso se ejecuta obligatoriamente utilizando guantes asépticos y descartables. <br>
+                    <strong>Etiquetado y QR:</strong> El técnico coloca una etiqueta física firmada con la fecha del servicio y escanea el código QR para actualizar el historial de mantenimiento en el sistema.</p>
+                </div>
+
             </div>
 
-            <div class="texto-informativo" style="text-align: left; margin-top: 30px;">
-                <h3>Protocolo de Higiene</h3>
-                <p>Detalle de los pasos realizados para la desinfección de dispensers y envases siguiendo normas internacionales.</p>
-            </div>
-
-            <a href="#" class="btn-volver-home" onclick="cerrarProcedimientos()">VOLVER AL INICIO</a>
+            <a href="javascript:void(0)" class="btn-volver-home" onclick="cerrarProcedimientos()">VOLVER AL INICIO</a>
         </div>
     </div>
 
@@ -584,6 +667,11 @@
             </div>
             <div class="promo-btn">
                 <a href="normativas.html" class="btn-conocenos"> NORMATIVAS</a>
+                <br>
+                <!-- BOTÓN PARA ABRIR PROCEDIMIENTOS -->
+                <button onclick="abrirProcedimientos()" class="btn-conocenos" style="margin-top: 20px; background: #00d4ff; border: none; cursor: pointer; display: inline-block; margin-left: -20px;">
+                    PROCEDIMIENTOS
+                </button>
             </div>
         </div>
     </section>
@@ -855,19 +943,22 @@
         });
 
         // LÓGICA PARA SECCIÓN OCULTA PROCEDIMIENTOS
-        function verificarAccesoQR() {
-            if (window.location.hash === "#procedimientos") {
-                document.getElementById('seccion-procedimientos').style.display = 'block';
-                document.body.style.overflow = 'hidden'; // Evita scroll de la pagina de fondo
-            }
+        function abrirProcedimientos() {
+            document.getElementById('seccion-procedimientos').style.display = 'block';
+            document.body.style.overflow = 'hidden'; 
         }
 
         function cerrarProcedimientos() {
             document.getElementById('seccion-procedimientos').style.display = 'none';
             document.body.style.overflow = 'auto';
-            // Limpiar hash de la URL sin recargar para que no se pueda volver facilmente
             history.replaceState(null, null, ' '); 
             window.scrollTo(0,0);
+        }
+
+        function verificarAccesoQR() {
+            if (window.location.hash === "#procedimientos") {
+                abrirProcedimientos();
+            }
         }
 
         // Ejecutar al cargar la página
