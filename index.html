@@ -1,0 +1,802 @@
+
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Suragua - Calidad en Agua</title>
+    
+    <!-- Fuentes e Iconos -->
+    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@300;400;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    
+    <!-- MAPA INTERACTIVO (LEAFLET CSS) -->
+    <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
+
+    <!-- Vinculación con el archivo CSS -->
+    <link rel="stylesheet" href="style.css">
+
+    <style>
+        /* Navbar Styles */
+
+        /* MODIFICACIÓN: Ajuste de fondo de contacto para que la imagen sea fluida y cubra todo */
+        .contacto {
+            background-image: url('./Suragua_lona_VF-IMPRIMIR(1).png'); 
+            background-position: center center;
+            background-size: 100% 100%; 
+            background-repeat: no-repeat;
+            background-attachment: scroll; 
+            min-height: 90vh; 
+            display: flex;
+            align-items: flex-start; /* Alineado al inicio superior */
+            justify-content: center;
+            padding: 10px 20px; /* Padding mínimo arriba para subir todo */
+            position: relative;
+        }
+        
+
+        .mailcorpo{
+            text-decoration: none;
+            color: white;
+        }
+
+
+        /* Overlay sutil para mejorar legibilidad de la imagen de fondo si fuera necesario */
+        .contacto::before {
+            content: "";
+            position: absolute;
+            top: 0; left: 0; width: 100%; height: 100%;
+            background: rgba(0, 0, 0, 0.1); 
+            z-index: 1;
+        }
+
+        .navbar-main {
+            position: fixed;
+            top: 0;
+            width: 100%;
+            background: rgba(255, 255, 255, 0.95);
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 15px 50px;
+            z-index: 2000;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+        }
+        
+        .logo-navbar-img {
+            height: 40px; 
+            width: auto;
+            display: block;
+        }
+
+        .navbar-main .nav-links {
+            display: flex;
+            list-style: none;
+            gap: 25px;
+            align-items: center; /* Asegura alineación vertical con el botón */
+        }
+        .navbar-main .nav-links a {
+            text-decoration: none;
+            color: #333;
+            font-weight: 600;
+            font-size: 14px;
+            transition: 0.3s;
+        }
+        .navbar-main .nav-links a:hover { color: #007bff; }
+
+        /* NUEVO ESTILO PARA BOTON CONTACTO VERDE */
+        .navbar-main .nav-links a.btn-nav-contacto {
+            background-color: #28a745; /* Verde */
+            color: white !important;
+            padding: 10px 20px;
+            border-radius: 8px;
+            transition: all 0.3s ease;
+        }
+        .navbar-main .nav-links a.btn-nav-contacto:hover {
+            background-color: #218838; /* Verde más oscuro al pasar el mouse */
+            transform: translateY(-2px);
+            box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+        }
+
+        .menu-toggle {
+            display: none;
+            flex-direction: column;
+            cursor: pointer;
+            gap: 5px;
+        }
+        .menu-toggle span {
+            width: 25px;
+            height: 3px;
+            background: #00468b;
+            transition: 0.3s;
+        }
+
+        .cobertura {
+            padding: 80px 0;
+            background: #f4f7f6;
+        }
+        .cobertura-grid {
+            display: flex;
+            flex-direction: column;
+            gap: 40px;
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 20px;
+        }
+        
+        @media (min-width: 992px) {
+            .cobertura-grid {
+                flex-direction: row;
+            }
+        }
+
+        .cobertura-lista { flex: 1.5; }
+        
+        .zona-select-mobile {
+            display: none;
+            width: 100%;
+            padding: 15px;
+            border-radius: 8px;
+            border: 2px solid #00468b;
+            font-family: 'Montserrat';
+            font-weight: 600;
+            margin-bottom: 20px;
+        }
+
+        .cobertura-lista ul {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            list-style: none;
+            gap: 10px;
+            padding: 0;
+        }
+        .cobertura-lista li {
+            padding: 8px 12px;
+            background: white;
+            border-radius: 5px;
+            box-shadow: 2px 2px 5px rgba(0,0,0,0.05);
+            font-weight: 500;
+            font-size: 13px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            border-left: 4px solid transparent;
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
+        }
+        .cobertura-lista li:hover {
+            background: #00468b;
+            color: white;
+            transform: translateY(-2px);
+            border-left: 4px solid #00d4ff;
+        }
+
+        #map {
+            flex: 1;
+            height: 500px;
+            min-height: 400px;
+            border-radius: 15px;
+            border: 3px solid #fff !important; 
+            box-shadow: 0 10px 30px rgba(0,0,0,0.1);
+            z-index: 1; 
+            background: #eee;
+        }
+
+        .hero { margin-top: 60px; }
+        
+        /* AJUSTE SECCIÓN NORMATIVAS */
+        .normativas-promo { padding: 250px 0; background-image: url(./foto\ sin\ nada.png); background-size: cover; background-position: center;}
+        
+        /* Ajustamos las columnas para que la imagen no ocupe tanto espacio */
+        .promo-container { 
+            display: grid; 
+            grid-template-columns: 1.5fr 1fr 1.2fr; 
+            align-items: center; 
+            gap: 40px; 
+            max-width: 1200px; 
+            margin: 0 auto; 
+            padding: 0 20px; 
+        }
+
+        .promo-text h3 { 
+            font-size: 38px; 
+            color:  rgb(255, 255, 255); 
+            font-weight: 700;
+            margin-bottom: 10px;
+        }
+        .promo-text p { 
+            font-size: 24px; 
+            color:  rgb(255, 255, 255); /* COLOR DISTINGUIBLE PARA ISO */
+            font-weight: 700;
+            text-shadow: 1px 1px 2px rgba(0,0,0,0.5);
+        }
+
+        /* AJUSTE PARA BAJAR EL BOTÓN */
+        .promo-btn {
+            margin-top: 280px; margin-left: -380px;
+        }
+
+        /* Ajuste específico de la imagen para que se vea bien */
+        .promo-img img { 
+            width: 100%; 
+            max-height: 250px; /* Limitamos la altura */
+            object-fit: cover; /* Recorte inteligente para que no se estire */
+            border-radius: 15px; 
+            box-shadow: 0 10px 20px rgba(0,0,0,0.2);
+            display: block;
+        }
+
+        /* MODIFICACIÓN PARA CENTRAR CARDS */
+        .grid-productos {
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: center; /* ESTO CENTRA LAS CARDS */
+            gap: 25px;
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+
+        .grid-productos .card {
+            flex: 0 1 280px; /* Tamaño base de las cards */
+            min-width: 250px;
+        }
+
+        .grid-productos .card img {
+            width: 100%;
+            height: auto;
+            max-height: 380px;
+            object-fit: contain;
+            display: block;
+            margin: 0 auto;
+        }
+
+        @media (max-width: 991px) {
+            .cobertura-lista ul { grid-template-columns: repeat(2, 1fr); }
+            .promo-text h3 { font-size: 30px; }
+            .promo-text p { font-size: 18px; }
+            .promo-container { grid-template-columns: 1.2fr 1fr 1fr; gap: 20px; }
+            .promo-btn { margin-top: 100px; }
+        }
+
+        @media (max-width: 768px) {
+            .navbar-main { padding: 15px 20px; }
+            .menu-toggle { display: flex; }
+            .navbar-main .nav-links {
+                display: none;
+                flex-direction: column;
+                position: absolute;
+                top: 60px;
+                left: 0;
+                width: 100%;
+                background: white;
+                padding: 20px;
+                box-shadow: 0 5px 10px rgba(0,0,0,0.1);
+            }
+            .navbar-main .nav-links.active { display: flex; }
+            
+            .cobertura-lista ul { display: none; }
+            .zona-select-mobile { display: block; }
+
+            #map { 
+                height: 350px !important; 
+                width: 100% !important; 
+                margin-top: 10px;
+            }
+            .promo-container { grid-template-columns: 1fr; text-align: center; }
+            .promo-img img { max-height: 200px; width: 80%; margin: 0 auto; }
+            .promo-btn { margin-top: 20px; }
+        }
+
+        .navbar-main {
+            padding: 5px 50px !important;
+            height: 90px;
+        }
+        .logo-navbar-img {
+            height: 150px !important;
+            transition: transform 0.3s ease;
+        }
+
+        /* FORMULARIO: POSICIONADO AL TOPE */
+        .contacto-wrapper {
+            position: relative;
+            z-index: 2;
+            margin: 0 auto !important;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            background: transparent !important; 
+            backdrop-filter: none !important; 
+            -webkit-backdrop-filter: none !important;
+            padding: 0px 5px !important; 
+            max-width: 400px !important; 
+            width: 100%;
+            border: none !important; 
+            box-shadow: none !important;
+            text-align: center;
+            margin-top: -160px !important; 
+        }
+
+        .contacto-info {
+            margin-bottom: -50px !important; 
+            width: 100%;
+        }
+
+        .contacto-info h2 {
+            color: #ffffff; 
+            text-shadow: 2px 2px 4px rgba(0,0,0,0.3);
+            font-size: 36px !important;
+            margin-bottom: 5px;
+            font-weight: 700;
+            text-transform: uppercase;
+        }
+
+        .contacto-info p {
+            color: #ffffff;
+            font-weight: 600;
+            font-size: 18px;
+            background: rgba(0, 70, 139, 0.7);
+            display: inline-block;
+            padding: 4px 18px;
+            border-radius: 50px;
+            margin-bottom: 5px;
+        }
+
+        .contacto-form {
+            width: 100%;
+            display: flex;
+            flex-direction: column;
+            gap: 10px; 
+        }
+
+        .form-row {
+            display: flex;
+            gap: 10px;
+            width: 100%;
+        }
+        .form-row input {
+            flex: 1;
+        }
+
+        .contacto-form input, 
+        .contacto-form textarea {
+            width: 100% !important;
+            padding: 14px !important; 
+            border-radius: 12px !important;
+            border: 1px solid rgba(255, 255, 255, 0.5) !important;
+            font-size: 15px;
+            background: rgba(255, 255, 255, 0.95) !important; 
+            transition: all 0.3s ease;
+            font-family: 'Montserrat';
+        }
+
+        .contacto-form input:focus, 
+        .contacto-form textarea:focus {
+            background: #fff !important;
+            border-color: #00d4ff !important;
+            box-shadow: 0 0 10px rgba(0, 212, 255, 0.3);
+            outline: none;
+        }
+
+        .btn-enviar {
+            background: linear-gradient(135deg, #00468b 0%, #007bff 100%) !important;
+            color: white !important;
+            font-weight: 700 !important;
+            padding: 16px !important;
+            border-radius: 12px !important;
+            font-size: 18px !important;
+            letter-spacing: 2px;
+            transition: all 0.4s ease !important;
+            border: none;
+            cursor: pointer;
+            margin-top: 5px;
+            box-shadow: 0 8px 15px rgba(0, 70, 139, 0.4);
+        }
+
+        .btn-enviar:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 12px 20px rgba(0, 212, 255, 0.4);
+        }
+
+        /* FOOTER CON REDES SOCIALES */
+        footer {
+            background: #002a54;
+            color: white;
+            padding: 40px 20px;
+            text-align: center;
+        }
+        .footer-socials {
+            margin-bottom: 20px;
+            display: flex;
+            justify-content: center;
+            gap: 25px;
+        }
+        .footer-socials a {
+            color: white;
+            font-size: 28px;
+            transition: all 0.3s ease;
+        }
+        .footer-socials a:hover {
+            color: #00d4ff;
+            transform: translateY(-5px);
+        }
+
+        @media (max-width: 768px) {
+            .navbar-main { height: 75px; }
+            .logo-navbar-img { height: 60px !important; }
+            .contacto-wrapper { padding: 0 10px !important; }
+            .contacto { padding-top: 80px !important; }
+            .form-row { flex-direction: column; gap: 10px; }
+        }
+
+        .contacto { background-size: cover !important; }
+
+    </style>
+</head>
+<body>
+
+    <nav class="navbar-main">
+        <div class="logo-nav">
+            <a href="#">
+            <img src="LOGOSURAGUA sin fondo.png" alt="Suragua" class="logo-navbar-img">
+        </a>
+        </div>
+        
+        <div class="menu-toggle" id="mobile-menu">
+            <span></span>
+            <span></span>
+            <span></span>
+        </div>
+
+        <ul class="nav-links" id="nav-list">
+            <li><a href="#acerca">Acerca de Nosotros</a></li>
+            <li><a href="#productos"> Productos
+            <li><a href="calidad.html">Calidad</li>
+            <li><a href="#contacto" class="btn-nav-contacto">Cotizar</a></li>
+        </ul>
+    </nav>
+
+    <a href="https://wa.me/5491100000000" class="whatsapp-float" target="_blank">
+        <i class="fab fa-whatsapp"></i>
+    </a>
+
+    <section class="hero">
+        <video autoplay muted loop playsinline preload="auto" poster="poster-video.jpg" class="hero-video">
+            <source src="Video Project nuevo.mp4" type="video/mp4">
+            Tu navegador no soporta video.
+        </video>
+        <div class="hero-content">
+            <img src="LOGOSURAGUA sin fondo.png" alt="Suragua Logo" class="hero-logo">
+            <p> Lideres en hidratación corporativa.</p>
+            <p>30 de años llevando calidad y bienestar a las principales empresas de Argentina.</p>
+        </div>
+    </section>
+
+    <!-- CARRUSEL -->
+    <div class="carousel-container">
+        <p class="carousel-title">Confían en nosotros</p>
+        <div class="slider">
+            <div class="slide-track">
+                <div class="slide"><img src="ceamse-logo-png_seeklogo-185581.png" alt="CEAMSE"></div>
+                <div class="slide"><img src="river-plate-logo-png_seeklogo-369569.png" alt="RIVER PLATE"></div>
+                <div class="slide"><img src="TELEFE LOGO.png" alt="TELEFE"></div>
+                <div class="slide"><img src="el trece.png" alt="EL TRECE"></div>
+                <div class="slide"><img src="tn logo.webp" alt="TN"></div>
+                <div class="slide"><img src="12670_167-Benito-Roggio-logo-300x300.jpg" alt="BENITO ROGGIO"></div>
+                <div class="slide"><img src="logo_molinos.jpg" alt="MOLINO CAÑUELAS"></div>
+                <div class="slide"><img src="Toyota-logo-500x281.png" alt="TOYOTA"></div>
+                <div class="slide"><img src="TELEFONICAMOVILES.webp" alt="TELEFONICA"></div>
+                <div class="slide"><img src="NACION.jpg" alt="MINISTERIO DE SALUD"></div>
+                <!-- Duplicados -->
+                <div class="slide"><img src="ceamse-logo-png_seeklogo-185581.png" alt="CEAMSE"></div>
+                <div class="slide"><img src="river-plate-logo-png_seeklogo-369569.png" alt="RIVER PLATE"></div>
+                <div class="slide"><img src="TELEFE LOGO.png" alt="TELEFE"></div>
+                <div class="slide"><img src="el trece.png" alt="EL TRECE"></div>
+                <div class="slide"><img src="tn logo.webp" alt="TN"></div>
+                <div class="slide"><img src="12670_167-Benito-Roggio-logo-300x300.jpg" alt="BENITO ROGGIO"></div>
+                <div class="slide"><img src="logo_molinos.jpg" alt="MOLINO CAÑUELAS"></div>
+                <div class="slide"><img src="Toyota-logo-500x281.png" alt="TOYOTA"></div>
+                <div class="slide"><img src="TELEFONICAMOVILES.webp" alt="TELEFONICA"></div>
+                <div class="slide"><img src="NACION.jpg" alt="MINISTERIO DE SALUD"></div>
+            </div>
+        </div>
+    </div>
+
+    <section id="acerca" class="acerca">
+        <div class="container">
+            <h2>ACERCA DE NOSOTROS</h2>
+            <div class="acerca-content">
+                <p>Somos una <strong>empresa argentina con más de 30 años de experiencia</strong>...</p>
+                <p>Desde 1991 brindamos un servicio confiable en todo Buenos Aires.</p>
+                <div style="text-align: center; margin-top: 30px;">
+                    <a href="historia.html" class="btn-conocenos" style="background-color: #00468b;">NUESTRA HISTORIA</a>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <section class="normativas-promo">
+        <div class="promo-container">
+            <div class="promo-text">
+                <h3>Calidad Certificada</h3>
+                <p>Avalados por Normas ISO-9001 e ISO-14001.</p>
+            </div>
+            <div class="promo-btn">
+                <a href="calidad.html" class="btn-conocenos"> CALIDAD</a>
+                <br>
+            </div>
+        </div>
+    </section>
+
+     <!-- SECCIÓN ANÁLISIS Y CALIDAD -->
+    <section class="analisis">
+        <div class="container">
+            <h2>Control de Calidad y Análisis</h2>
+            <p>Mantenemos la transparency total. Aquí puedes consultar nuestros informes actualizados.</p>
+            <div class="grid-analisis">
+                <div class="item-analisis">
+                    <i class="fas fa-file-medical"></i>
+                    <h4>Análisis Bacteriológico</h4>
+                    <p>Garantizamos la ausencia total de microorganismos nocivos.</p>
+                    <a href="./Bacteriologico Abril.pdf" class="btn-descarga">Ver Reporte</a>
+                </div>
+                <div class="item-analisis">
+                    <i class="fas fa-microscope"></i>
+                    <h4>Análisis Físico-Químico</h4>
+                    <p>Control de minerales y PH para asegurar el sabor y la pureza.</p>
+                    <a href="./134691 fq pdf.pdf" class="btn-descarga">Ver Reporte</a>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- PRODUCTOS (BIDONES) -->
+    <section id="productos" class="productos">
+        <div class="container">
+            <span class="tag">Nuestros Productos</span>
+            <h2>Bidones de Agua</h2>
+            <div class="grid-productos">
+                <div class="card"><img src="./b20.png" alt="Bidón 20L"><h3>Bidón 20 Litros</h3></div>
+                <div class="card"><img src="./b12.png" alt="Bidón 12L"><h3>Bidón 12 Litros</h3></div>
+                <div class="card"><img src="./b8.png" alt="Bidón 8L"><h3>Bidón 8 Litros</h3></div>
+                 <div class="card"><img src="./vasos v2.2.png" alt="Vasos Plasticos"><h3>Vasos de 180cc</h3></div>
+
+                
+            </div>
+        </div>
+    </section>
+
+       <!-- SECCIÓN PRODUCTOS: DISPENSERS -->
+    <section class="productos bg-white">
+        <div class="container">
+            <h2>Nuestros Dispensers</h2>
+            <div class="grid-productos">
+                <div class="card alt">
+                    <img src="./dispenser red.png" alt="Dispenser de Red">
+                    <h3>Dispenser de Red</h3>
+                    <p>Conexión directa con filtros de carbón activado. Agua purificada infinita.</p>
+                </div>
+                <div class="card alt">
+                    <img src="./dispenser v1 (1).png" alt="Dispenser a Bidón">
+                    <h3>Dispenser a Bidón</h3>
+                    <p>Sistema Frío/Calor de alta recuperación para botellones de 12 y 20L.</p>
+                </div>
+                <div class="card alt">
+                    <img src="./HOGAREÑO.png" alt="Hogareño">
+                    <h3>Dispenser de agua natural</h3>
+                    <p>Disfrutá de agua fresca y natural en cualquier momento con este práctico dispenser de sobremesa</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+
+    <!-- SECCIÓN COBERTURA -->
+    <section class="cobertura">
+        <div class="container">
+            <h2 style="text-align: center; margin-bottom: 40px;">ZONAS DE COBERTURA</h2>
+            <div class="cobertura-grid">
+                <div class="cobertura-lista">
+                    <h3>Selecciona tu ubicación</h3>
+                    
+                    <select class="zona-select-mobile" onchange="irAZona(this.value)">
+                        <option value="">Seleccionar Localidad...</option>
+                        <option value="centro">CABA Centro</option>
+                        <option value="palermo">Palermo / Belgrano</option>
+                        <option value="vlopez">Vicente López</option>
+                        <option value="sisidro">San Isidro</option>
+                        <option value="tigre">Tigre</option>
+                        <option value="smartin">San Martín</option>
+                        <option value="moron">Morón / Castelar</option>
+                        <option value="ramos">Ramos Mejía</option>
+                        <option value="avellaneda">Avellaneda</option>
+                        <option value="quilmes">Quilmes</option>
+                        <option value="lomas">Lomas de Zamora</option>
+                        <option value="lanus">Lanús</option>
+                        <option value="laplata">La Plata</option>
+                        <option value="pilar">Pilar</option>
+                        <option value="escobar">Escobar</option>
+                        <option value="sanjusto">San Justo</option>
+                        <option value="polvorines">Los Polvorines</option>
+                        <option value="palomar">El Palomar</option>
+                        <option value="moreno">Moreno</option>
+                        <option value="merlo">Merlo</option>
+                        <option value="grodriguez">Gral. Rodríguez</option>
+                        <option value="gcatan">González Catán</option>
+                        <option value="laferrere">Laferrère</option>
+                        <option value="haedo">Haedo</option>
+                        <option value="ituzaingo">Ituzaingó</option>
+                        <option value="zarate">Zárate</option>
+                        <option value="tortuguitas">Tortuguitas</option>
+                    </select>
+
+                    <ul id="lista-zonas">
+                        <li onclick="irAZona('centro')"><i class="fas fa-map-marker-alt"></i> CABA Centro</li>
+                        <li onclick="irAZona('palermo')"><i class="fas fa-map-marker-alt"></i> Palermo</li>
+                        <li onclick="irAZona('vlopez')"><i class="fas fa-map-marker-alt"></i> Vicente López</li>
+                        <li onclick="irAZona('sisidro')"><i class="fas fa-map-marker-alt"></i> San Isidro</li>
+                        <li onclick="irAZona('tigre')"><i class="fas fa-map-marker-alt"></i> Tigre</li>
+                        <li onclick="irAZona('smartin')"><i class="fas fa-map-marker-alt"></i> San Martín</li>
+                        <li onclick="irAZona('moron')"><i class="fas fa-map-marker-alt"></i> Morón</li>
+                        <li onclick="irAZona('ramos')"><i class="fas fa-map-marker-alt"></i> Ramos Mejía</li>
+                        <li onclick="irAZona('avellaneda')"><i class="fas fa-map-marker-alt"></i> Avellaneda</li>
+                        <li onclick="irAZona('quilmes')"><i class="fas fa-map-marker-alt"></i> Quilmes</li>
+                        <li onclick="irAZona('lomas')"><i class="fas fa-map-marker-alt"></i> Lomas</li>
+                        <li onclick="irAZona('lanus')"><i class="fas fa-map-marker-alt"></i> Lanús</li>
+                        <li onclick="irAZona('laplata')"><i class="fas fa-map-marker-alt"></i> La Plata</li>
+                        <li onclick="irAZona('pilar')"><i class="fas fa-map-marker-alt"></i> Pilar</li>
+                        <li onclick="irAZona('escobar')"><i class="fas fa-map-marker-alt"></i> Escobar</li>
+                        <li onclick="irAZona('sanjusto')"><i class="fas fa-map-marker-alt"></i> San Justo</li>
+                        <li onclick="irAZona('polvorines')"><i class="fas fa-map-marker-alt"></i> Polvorines</li>
+                        <li onclick="irAZona('palomar')"><i class="fas fa-map-marker-alt"></i> El Palomar</li>
+                        <li onclick="irAZona('moreno')"><i class="fas fa-map-marker-alt"></i> Moreno</li>
+                        <li onclick="irAZona('merlo')"><i class="fas fa-map-marker-alt"></i> Merlo</li>
+                        <li onclick="irAZona('grodriguez')"><i class="fas fa-map-marker-alt"></i> Gral. Rodríguez</li>
+                        <li onclick="irAZona('gcatan')"><i class="fas fa-map-marker-alt"></i> G. Catán</li>
+                        <li onclick="irAZona('laferrere')"><i class="fas fa-map-marker-alt"></i> Laferrère</li>
+                        <li onclick="irAZona('haedo')"><i class="fas fa-map-marker-alt"></i> Haedo</li>
+                        <li onclick="irAZona('ituzaingo')"><i class="fas fa-map-marker-alt"></i> Ituzaingó</li>
+                        <li onclick="irAZona('zarate')"><i class="fas fa-map-marker-alt"></i> Zárate</li>
+                        <li onclick="irAZona('tortuguitas')"><i class="fas fa-map-marker-alt"></i> Tortuguitas</li>
+                    </ul>
+                </div>
+                <div id="map"></div>
+            </div>
+        </div>
+    </section>
+
+    <!-- CONTACTO OPTIMIZADO: POSICIONADO AL TOPE -->
+    <section id="contacto" class="contacto">
+        <div class="container">
+            <div class="contacto-wrapper">
+                <div class="contacto-info">
+                    <h2>Contáctanos</h2>
+                    <p>ventas.suragua@gmail.com</p>
+                </div>
+                <form class="contacto-form" id="miFormulario" action="https://formspree.io/f/xnjrdgpl" method="POST">
+                    <div class="form-row">
+                        <input type="text" name="nombre" placeholder="Nombre" required>
+                        <input type="text" name="apellido" placeholder="Apellido" required>
+                        <input type="text" name="razon social" placeholder="Razon Social" required>
+                    </div>
+                    <input type="text" name="celular" placeholder="Telefono" required>
+                    <input type="email" name="email" placeholder="Correo electrónico" required>
+                    <input type="text" name="mensaje" placeholder="Escriba su consulta" required>
+                    <textarea name="mensaje" placeholder="Consulta (Opcional)" rows="2" style="display:none;"></textarea>
+                    
+                    <button type="submit" class="btn-enviar" id="botonEnviar">ENVIAR MENSAJE</button>
+                    <p id="mensajeExito" style="display:none; color: #ffffff; font-weight: bold; margin-top: 15px;">¡Mensaje enviado con éxito!</p>
+                </form>
+            </div>
+        </div>
+    </section>
+
+    <!-- FOOTER CON REDES SOCIALES -->
+    <footer>
+        <div class="footer-socials">
+            <a href="https://www.instagram.com/suragua_ok/" target="_blank"><i class="fab fa-instagram"></i></a>
+            <a href="https://www.facebook.com/Suragua" target="_blank"><i class="fab fa-facebook"></i></a>
+            <a href="https://www.linkedin.com/company/suragua" target="_blank"><i class="fab fa-linkedin"></i></a>
+        </div>
+        <div class="textfooter">
+            <h2 class="h2contacto">Contacto</h1>
+            <a class="mailcorpo"  href="mailto:info@suragua.com.ar?subject=Consulta%20sobre%20el%20servicio">info@suragua.com.ar</a>
+        </div>
+        <p>&copy; 2026 Suragua - Argentina.</p>
+    </footer>
+
+    <!-- MAPA REAL (LEAFLET JS) -->
+    <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
+    
+    <script>
+        const mobileMenu = document.getElementById('mobile-menu');
+        const navLinks = document.getElementById('nav-list');
+
+        mobileMenu.addEventListener('click', () => {
+            navLinks.classList.toggle('active');
+        });
+
+        var map = L.map('map').setView([-34.6037, -58.3816], 10);
+
+        L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+            attribution: '© OpenStreetMap'
+        }).addTo(map);
+
+        var zonas = {
+            'centro': { coords: [-34.6037, -58.3816], nombre: 'CABA Centro' },
+            'palermo': { coords: [-34.5711, -58.4233], nombre: 'Palermo / Belgrano' },
+            'vlopez': { coords: [-34.5223, -58.4750], nombre: 'Vicente López' },
+            'sisidro': { coords: [-34.4719, -58.5276], nombre: 'San Isidro' },
+            'tigre': { coords: [-34.4251, -58.5796], nombre: 'Tigre' },
+            'smartin': { coords: [-34.5779, -58.5381], nombre: 'San Martín' },
+            'moron': { coords: [-34.6515, -58.6226], nombre: 'Morón / Castelar' },
+            'ramos': { coords: [-34.6425, -58.5639], nombre: 'Ramos Mejía' },
+            'avellaneda': { coords: [-34.6611, -58.3644], nombre: 'Avellaneda' },
+            'quilmes': { coords: [-34.7245, -58.2520], nombre: 'Quilmes' },
+            'lomas': { coords: [-34.7588, -58.4022], nombre: 'Lomas de Zamora' },
+            'lanus': { coords: [-34.7003, -58.3962], nombre: 'Lanús' },
+            'laplata': { coords: [-34.9215, -57.9545], nombre: 'La Plata' },
+            'pilar': { coords: [-34.4581, -58.9142], nombre: 'Pilar' },
+            'escobar': { coords: [-34.3408, -58.7905], nombre: 'Escobar' },
+            'sanjusto': { coords: [-34.6800, -58.5583], nombre: 'San Justo' },
+            'polvorines': { coords: [-34.5025, -58.7025], nombre: 'Los Polvorines' },
+            'palomar': { coords: [-34.6133, -58.5911], nombre: 'El Palomar' },
+            'moreno': { coords: [-34.6508, -58.7908], nombre: 'Moreno' },
+            'merlo': { coords: [-34.6653, -58.7275], nombre: 'Merlo' },
+            'grodriguez': { coords: [-34.6078, -58.9542], nombre: 'General Rodríguez' },
+            'gcatan': { coords: [-34.7675, -58.6253], nombre: 'González Catán' },
+            'laferrere': { coords: [-34.7508, -58.5839], nombre: 'Gregorio de Laferrère' },
+            'haedo': { coords: [-34.6444, -58.5447], nombre: 'Haedo' },
+            'ituzaingo': { coords: [-34.6586, -58.6669], nombre: 'Ituzaingó' },
+            'zarate': { coords: [-34.0981, -59.0286], nombre: 'Zárate' },
+            'tortuguitas': { coords: [-34.4750, -58.7594], nombre: 'Tortuguitas' },
+        };
+
+        var marcadores = {};
+
+        for (var key in zonas) {
+            var z = zonas[key];
+            var m = L.marker(z.coords).addTo(map).bindPopup("<b>" + z.nombre + "</b><br>Zona de Cobertura Suragua");
+            marcadores[key] = m;
+        }
+
+        function irAZona(key) {
+            if(!key || !zonas[key]) return;
+            var z = zonas[key];
+            
+            map.invalidateSize(); 
+            map.flyTo(z.coords, 13);
+            setTimeout(() => { marcadores[key].openPopup(); }, 300);
+            
+            if(window.innerWidth < 768) {
+                document.getElementById('map').scrollIntoView({ behavior: 'smooth', block: 'center' });
+            }
+        }
+
+        window.addEventListener('load', () => { setTimeout(() => { map.invalidateSize(); }, 500); });
+
+        const $form = document.querySelector('#miFormulario');
+        const $button = document.querySelector('#botonEnviar');
+        const $mensaje = document.querySelector('#mensajeExito');
+
+        $form.addEventListener('submit', async function(event) {
+            event.preventDefault(); 
+            $button.innerText = 'Enviando...';
+            $button.disabled = true;
+            const form = new FormData(this);
+            const response = await fetch(this.action, {
+                method: this.method,
+                body: form,
+                headers: { 'Accept': 'application/json' }
+            });
+            if (response.ok) {
+                this.reset(); 
+                $button.innerText = 'ENVIAR MENSAJE';
+                $button.disabled = false;
+                $mensaje.style.display = 'block'; 
+                setTimeout(() => { $mensaje.style.display = 'none'; }, 5000);
+            }
+        });
+
+    </script>
+</body>
+</html>

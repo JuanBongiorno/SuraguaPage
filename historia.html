@@ -1,0 +1,235 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Nuestra Historia - Suragua</title>
+    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@300;400;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="style.css">
+    <style>
+        /* Estilos Generales Manteniendo tu Estética */
+        body {
+            margin: 0;
+            padding: 0;
+            font-family: 'Montserrat', sans-serif;
+            background-image: url('./fondo 1.2.png');
+            background-position: center;
+            background-repeat: no-repeat;
+            background-size: cover;
+            background-attachment: fixed;
+            backdrop-filter: blur(8px);
+            color: #2c3e50;
+            overflow-x: hidden;
+        }
+
+        body::before {
+            content: "";
+            position: fixed;
+            top: 0; left: 0; width: 100%; height: 100%;
+            background: rgba(255, 255, 255, 0.2);
+            z-index: -1;
+        }
+
+        .container {
+            max-width: 1100px; 
+            margin: 0 auto;
+            padding: 60px 20px;
+            animation: fadeIn 1s ease-out;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        .back-btn {
+            display: inline-flex;
+            align-items: center;
+            padding: 12px 25px;
+            background: linear-gradient(135deg, #00468b 0%, #002d5a 100%);
+            color: white;
+            text-decoration: none;
+            border-radius: 50px;
+            margin-bottom: 40px;
+            font-weight: 600;
+            font-size: 14px;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+            box-shadow: 0 4px 15px rgba(0, 70, 139, 0.3);
+        }
+        .back-btn:hover { 
+            transform: translateX(-5px); 
+            box-shadow: 0 6px 20px rgba(0, 70, 139, 0.4);
+        }
+
+        /* AJUSTE DE SECCIÓN: Título al medio y mejor distribución */
+        .seccion {
+            display: flex;
+            flex-direction: column; /* Cambiado a columna para centrar título y distribuir texto */
+            align-items: center;
+            margin-bottom: 80px;
+            background: rgba(255, 255, 255, 0.85); 
+            backdrop-filter: blur(10px);
+            border-radius: 25px;
+            overflow: hidden;
+            border: 1px solid rgba(255, 255, 255, 0.5);
+            box-shadow: 0 20px 40px rgba(0,0,0,0.08);
+            transition: transform 0.3s ease;
+        }
+
+        .seccion-reverse {
+            flex-direction: column; /* Mantenemos consistencia en la versión reverse */
+        }
+
+        .texto-lado {
+            width: 100%; /* Ocupa todo el ancho para distribuir mejor el texto */
+            padding: 50px 60px 30px 60px; /* Ajuste de padding */
+            text-align: center; /* Centra el contenido de texto */
+            box-sizing: border-box;
+        }
+
+        .texto-lado h1, .texto-lado h2 {
+            color: #00468b;
+            margin-top: 0;
+            font-size: 2.5rem; /* Un poco más grande para el centro */
+            font-weight: 700;
+            position: relative;
+            padding-bottom: 20px;
+            display: inline-block; /* Para que la línea se centre con el texto */
+        }
+
+        /* Centrado de la línea decorativa */
+        .texto-lado h1::after, .texto-lado h2::after {
+            content: "";
+            position: absolute;
+            bottom: 0;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 80px;
+            height: 4px;
+            background: #00a8e8;
+            border-radius: 2px;
+        }
+
+        .texto-lado p {
+            font-size: 18px;
+            line-height: 1.8;
+            font-weight: 400;
+            color: #4a5568;
+            text-align: center; /* Texto centrado para armonía */
+            max-width: 900px; /* Evita que las líneas sean infinitas y cansen la vista */
+            margin: 25px auto 0 auto; /* Centra el bloque del párrafo */
+        }
+
+        .foto-lado {
+            width: 100%; /* La foto ahora ocupa todo el ancho inferior */
+            height: 450px;
+            object-fit: cover;
+            display: block;
+            filter: brightness(0.95) contrast(1.1);
+            transition: 0.5s ease;
+        }
+        .seccion:hover .foto-lado {
+            filter: brightness(1.05) contrast(1.1);
+        }
+
+        /* Contenedor para dos fotos con separación */
+        .contenedor-fotos-duo {
+            display: flex;
+            width: 100%;
+            flex-direction: row;
+            gap: 20px; /* Espacio entre las fotos */
+            padding: 0 30px 30px 30px; /* Espacio a los costados y abajo */
+            box-sizing: border-box;
+        }
+        .contenedor-fotos-duo .foto-lado {
+            width: 50%; /* Cada una ocupa la mitad */
+            border-radius: 15px; /* Esquinas redondeadas para que se vea mejor la separación */
+        }
+
+        /* Tercera Sección: Grilla de Fotos */
+        .seccion-fotos {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 30px;
+            margin-top: 20px;
+        }
+
+        .foto-grande {
+            width: 100%;
+            height: 450px;
+            object-fit: cover;
+            border-radius: 25px;
+            box-shadow: 0 15px 35px rgba(0,0,0,0.12);
+            transition: all 0.5s ease;
+            border: 4px solid white;
+        }
+        .foto-grande:hover { 
+            transform: scale(1.03) translateY(-10px);
+            box-shadow: 0 25px 50px rgba(0,0,0,0.2);
+        }
+
+        /* Responsivo */
+        @media (max-width: 768px) {
+            .texto-lado {
+                padding: 40px 20px;
+            }
+            .texto-lado h1, .texto-lado h2 {
+                font-size: 1.8rem;
+            }
+            .foto-lado {
+                height: 300px;
+            }
+            .seccion-fotos {
+                grid-template-columns: 1fr;
+            }
+            /* Ajuste de las dos fotos en móvil */
+            .contenedor-fotos-duo {
+                flex-direction: column;
+                padding: 0 20px 20px 20px;
+            }
+            .contenedor-fotos-duo .foto-lado {
+                width: 100%;
+            }
+        }
+    </style>
+</head>
+<body>
+
+    <div class="container">
+        <a href="index.html" class="back-btn">← Volver al Inicio</a>
+
+        <!-- PRIMERA SECCIÓN -->
+        <section class="seccion">
+            <div class="texto-lado">
+                <h1>Nuestra Historia</h1>
+                <p>Suragua nació en 1991 como un pequeño emprendimiento familiar con la visión de profesionalizar la distribución de agua envasada en Buenos Aires. Después de más de tres décadas, hemos crecido junto a nuestros clientes, desde las primeras entregas barriales hasta convertirnos en proveedores estratégicos de las empresas más grandes del país.
+</p>
+            </div>
+            <img src="./frenteviejo.jpg" alt="Inicios de Suragua" class="foto-lado">
+        </section>
+
+        <!-- SEGUNDA SECCIÓN -->
+        <section class="seccion seccion-reverse">
+            <div class="texto-lado">
+                <h2>Innovación y Calidad</h2>
+                <p>Nuestra planta ha sido pionera en la implementación de sistemas de filtrado y ozonización, garantizando un producto libre de impurezas. Hoy, con más de 30 años de trayectoria, seguimos manteniendo los mismos valores de confianza y puntualidad que nos dieron origen. Nuestra misión es ofrecer agua pura y segura, superando las expectativas de nuestros clientes con responsabilidad y compromiso ambiental.
+Buscamos ser una empresa modelo en el sector, mejorando cada día nuestros estándares de calidad.
+Nos guían valores sólidos: satisfacción del cliente, trabajo en equipo, responsabilidad con la salud y el medio ambiente, y compromiso con la excelencia.</p>
+            </div>
+            <div class="contenedor-fotos-duo">
+                <img src="lavado.png" alt="Nuestra Planta 1" class="foto-lado">
+                <img src="lavado.png" alt="Nuestra Planta 2" class="foto-lado">
+            </div>
+        </section>
+
+        <!-- TERCERA SECCIÓN -->
+        <section class="seccion-fotos">
+            <img src="camioneta nueva.jpg" alt="Logística" class="foto-grande">
+            <img src="flota 2.0.png" alt="Logística" class="foto-grande">
+        </section>
+    </div>
+
+</body>
+</html>
