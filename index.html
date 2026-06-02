@@ -1,3 +1,5 @@
+--- START OF FILE Paste June 02, 2026 - 12:35PM ---
+
 
 <!DOCTYPE html>
 <html lang="es">
@@ -284,7 +286,27 @@
             }
             .promo-container { grid-template-columns: 1fr; text-align: center; }
             .promo-img img { max-height: 200px; width: 80%; margin: 0 auto; }
-            .promo-btn { margin-top: 20px; }
+            
+            /* AJUSTE BOTON CALIDAD MOBILE */
+            .promo-btn { 
+                margin-top: 20px !important; 
+                margin-left: 0 !important; 
+                text-align: center;
+                display: flex;
+                justify-content: center;
+            }
+            .normativas-promo { padding: 100px 0 !important; }
+
+            /* AJUSTE FORMULARIO CONTACTO MOBILE */
+            .contacto {
+                padding-top: 60px !important;
+                align-items: center !important; /* Centrado vertical */
+            }
+            .contacto-wrapper { 
+                margin-top: 0 !important; /* Quita el desfasaje negativo */
+                padding: 20px !important; 
+                max-width: 90% !important; /* Se ajusta al ancho del celular */
+            }
         }
 
         .navbar-main {
@@ -423,8 +445,6 @@
         @media (max-width: 768px) {
             .navbar-main { height: 75px; }
             .logo-navbar-img { height: 60px !important; }
-            .contacto-wrapper { padding: 0 10px !important; }
-            .contacto { padding-top: 80px !important; }
             .form-row { flex-direction: column; gap: 10px; }
         }
 
@@ -449,8 +469,8 @@
 
         <ul class="nav-links" id="nav-list">
             <li><a href="#acerca">Acerca de Nosotros</a></li>
-            <li><a href="#productos"> Productos
-            <li><a href="calidad.html">Calidad</li>
+            <li><a href="#productos"> Productos</a></li>
+            <li><a href="calidad.html">Calidad</a></li>
             <li><a href="#contacto" class="btn-nav-contacto">Cotizar</a></li>
         </ul>
     </nav>
@@ -522,7 +542,6 @@
             </div>
             <div class="promo-btn">
                 <a href="calidad.html" class="btn-conocenos"> CALIDAD</a>
-                <br>
             </div>
         </div>
     </section>
@@ -697,7 +716,7 @@
             <a href="https://www.linkedin.com/company/suragua" target="_blank"><i class="fab fa-linkedin"></i></a>
         </div>
         <div class="textfooter">
-            <h2 class="h2contacto">Contacto</h1>
+            <h2 class="h2contacto">Contacto</h2>
             <a class="mailcorpo"  href="mailto:info@suragua.com.ar?subject=Consulta%20sobre%20el%20servicio">info@suragua.com.ar</a>
         </div>
         <p>&copy; 2026 Suragua - Argentina.</p>
