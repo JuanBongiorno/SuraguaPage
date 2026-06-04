@@ -4,7 +4,10 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Normativas de Calidad - Suragua</title>
+    <!-- Agregado: Font Awesome para que el icono de WhatsApp sea visible -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
     <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;700&display=swap" rel="stylesheet">
+    <link rel="shortcut icon" href="./LOGOSURAGUA sin fondo.png" type="image/x-icon">
     <link rel="stylesheet" href="style.css">
     <style>
         body { font-family: 'Montserrat', sans-serif; line-height: 1.6; background-image: url(./FONDO\ LOGO\ LOGO.png); background-repeat: no-repeat; background-size: cover; background-attachment: fixed; backdrop-filter: blur(6px);}
@@ -117,6 +120,49 @@
             color: #444;
         }
 
+        /* --- NUEVOS ESTILOS PARA REPARAR EL BOTÓN FLOTANTE --- */
+        
+        /* 1. Reparación del conflicto de Backdrop-Filter en el Body */
+        body {
+            backdrop-filter: none !important; /* Desactivamos del body para que el botón pueda flotar */
+            position: relative;
+        }
+
+        body::before {
+            content: "";
+            position: fixed; /* El desenfoque ahora te sigue a ti también */
+            top: 0; left: 0; width: 100%; height: 100%;
+            backdrop-filter: blur(6px); /* Restauramos la estética exacta que tenías */
+            z-index: -1; 
+            pointer-events: none;
+        }
+
+        /* 2. Estilos del botón para que sea 100% persistente (Fixed) */
+        .whatsapp-float {
+            position: fixed !important; /* FIXED absoluto al viewport (pantalla) */
+            width: 60px;
+            height: 60px;
+            bottom: 40px; /* Distancia del borde inferior de la pantalla */
+            right: 40px;  /* Distancia del borde derecho de la pantalla */
+            background-color: #25d366;
+            color: white !important;
+            border-radius: 50px;
+            text-align: center;
+            font-size: 35px;
+            box-shadow: 2px 5px 15px rgba(0,0,0,0.3);
+            z-index: 2147483647 !important; /* El valor más alto posible para que nada lo tape */
+            display: flex !important;
+            align-items: center;
+            justify-content: center;
+            text-decoration: none !important;
+            transition: all 0.3s ease;
+        }
+
+        .whatsapp-float:hover {
+            background-color: #128c7e;
+            transform: scale(1.1);
+        }
+
         @media (max-width: 768px) {
             .normas-section { padding: 60px 15px; }
             .header-box h1 { font-size: 20px; }
@@ -129,10 +175,25 @@
             .purificacion-item {margin-left: -40px;}
             #procedimientos { padding: 40px 20px; }
             .timeline-pasos { margin-left: 35px; }
+            
+            /* Ajuste para celulares */
+            .whatsapp-float {
+                width: 55px;
+                height: 55px;
+                bottom: 20px;
+                right: 20px;
+                font-size: 30px;
+            }
         }
     </style>
 </head>
-<body>
+<body>  
+        
+    <!-- Botón de WhatsApp - Ahora configurado para seguir el scroll siempre -->
+    <a href="https://wa.me/5491157935925" class="whatsapp-float" target="_blank">
+        <i class="fab fa-whatsapp"></i>
+    </a>
+
     <div class="normas-section">
         <a href="index.html" class="back-btn">← Volver al Inicio</a>
         
@@ -140,6 +201,19 @@
             <h1>Agua segura, pura y certificada: tecnología, ciencia y compromiso en cada gota</h1>
         </div>
 
+        <!-- SECCIÓN PROCEDIMIENTOS INTEGRADA AQUÍ -->
+        <section id="procedimientos">
+            <h2>Procedimientos</h2>
+            <p style="margin-bottom: 30px;">Cambio correcto de Bidon.</p>
+            
+            <div class="video-wrapper">
+                <video controls style="width: 100%; height: 100%;">
+                    <source src="./VIDEO-2026-05-28-15-23-22.mp4" type="video/mp4">
+                    Tu navegador no soporta video.
+                </video>
+            </div>
+        </section>
+        
         <div class="proceso-card">
             <div class="proceso-contenedor-flex">
                 <div class="proceso-texto">
@@ -194,29 +268,6 @@
             </div>
         </div>
 
-        <!-- SECCIÓN PROCEDIMIENTOS INTEGRADA AQUÍ -->
-        <section id="procedimientos">
-            <h2>Procedimiento de Sanitización</h2>
-            <p style="margin-bottom: 30px;">Cambio correcto de Bidon.</p>
-            
-            <div class="video-wrapper">
-                <video controls style="width: 100%; height: 100%;">
-                    <source src="./VIDEO-2026-05-28-15-23-22.mp4" type="video/mp4">
-                    Tu navegador no soporta video.
-                </video>
-            </div>
-
-                      <!-- <h2>Sanitización de Dispenser</h2>
-            <p style="margin-bottom: 30px;">Higiene correcto del equipo.</p>
-
-                        <div class="video-wrapper">
-                <video controls style="width: 100%; height: 100%;">
-                    <source src="./VIDEO-2026-05-28-15-23-22.mp4" type="video/mp4">
-                    Tu navegador no soporta video.
-                </video>
-            </div> -->
-        </section>
-        
         <div class="norma-card">
             <h2>ISO 9001 - Gestión de Calidad</h2>
             <p>Asegura que todos nuestros procesos productivos cumplen con los más altos estándares internacionales, garantizando la satisfacción del cliente en cada entrega.</p>
@@ -236,13 +287,13 @@
                         <i class="fas fa-file-medical"></i>
                         <h4>Análisis Bacteriológico</h4>
                         <p>Garantizamos la ausencia total de microorganismos nocivos.</p>
-                        <a href="#" class="btn-descarga">Ver Reporte</a>
+                        <a href="https://drive.google.com/drive/folders/1RpoQYZzxYOEK2OFl9Xz-7437d1PO2uLZ " class="btn-descarga">Ver Reporte</a>
                     </div>
                     <div class="item-analisis">
                         <i class="fas fa-microscope"></i>
                         <h4>Análisis Físico-Químico</h4>
                         <p>Control de minerales y PH para asegurar el sabor y la pureza.</p>
-                        <a href="#" class="btn-descarga">Ver Reporte</a>
+                        <a href="https://drive.google.com/drive/folders/1ceAID0vAva41FM7g65a05YrpPNM0mAAg" class="btn-descarga">Ver Reporte</a>
                     </div>
                 </div>
             </div>

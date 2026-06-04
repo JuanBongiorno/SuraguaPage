@@ -97,10 +97,12 @@ body {
 }
 .hero p { 
     font-size: 1.4rem; 
-    margin-bottom: 35px; 
+    margin-bottom: 25px; 
     opacity: 0.95; 
     font-weight: 600;
-    text-shadow: 0 2px 8px rgba(0,0,0,0.5); 
+    color: #ffffff;
+    font-size: 30px;
+    text-shadow: 20px 20px 20px rgba(8, 8, 8, 8);
 }
 .btn-conocenos {
     padding: 18px 50px; 
@@ -134,7 +136,7 @@ body {
     display: flex; 
     /* Ancho: 500px por logo * 18 logos totales */
     width: calc(500px * 18); 
-    animation: scroll 35s linear infinite; 
+    animation: scroll 25s linear infinite; 
 }
 .slide { 
     width: 500px; /* Logos mucho más anchos */

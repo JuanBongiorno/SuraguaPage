@@ -9,6 +9,7 @@
     <!-- Fuentes e Iconos -->
     <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@300;400;600;700&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <link rel="shortcut icon" href="./LOGOSURAGUA sin fondo.png" type="image/x-icon">
     
     <!-- MAPA INTERACTIVO (LEAFLET CSS) -->
     <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
@@ -18,7 +19,7 @@
 
     <style>
         /* Navbar Styles */
-        
+         
         .tag{
             font-size: 1.8rem;
         }
@@ -187,6 +188,38 @@
         }
 
         .hero { margin-top: 60px; }
+
+        .hero p{
+            color: #ffffff;
+            font-size: 30px;
+            text-shadow: 20px 20px 20px rgba(8, 8, 8, 8);
+        }
+
+        #procedimientos {
+            background: rgb(255, 255, 255);
+            padding: 60px 40px;
+            border-radius: 15px;
+            box-shadow: 0 10px 20px rgba(0,0,0,0.05);
+            margin-bottom: 30px;
+            text-align: center;
+        }
+
+        #procedimientos h2 {
+            color: #00468b;
+            margin-bottom: 20px;
+            font-size: 28px;
+        }
+
+        .video-wrapper {
+            width: 100%;
+            max-width: 800px;
+            aspect-ratio: 16/9;
+            background: #000;
+            margin: 0 auto 40px;
+            border-radius: 15px;
+            overflow: hidden;
+            box-shadow: 0 10px 20px rgba(0,0,0,0.2);
+        }
         
         /* AJUSTE SECCIÓN NORMATIVAS */
         .normativas-promo { padding: 250px 0; background-image: url(./sin\ nada.png); background-size: cover; background-position: center;}
@@ -254,6 +287,7 @@
             margin: 0 auto;
         }
 
+    
         @media (max-width: 991px) {
             .cobertura-lista ul { grid-template-columns: repeat(2, 1fr); }
             .promo-text h3 { font-size: 30px; }
@@ -477,7 +511,7 @@
         </ul>
     </nav>
 
-    <a href="https://wa.me/5491100000000" class="whatsapp-float" target="_blank">
+    <a href="https://wa.me/5491157935925" class="whatsapp-float" target="_blank">
         <i class="fab fa-whatsapp"></i>
     </a>
 
@@ -489,21 +523,27 @@
         <div class="hero-content">
             <img src="LOGOSURAGUA sin fondo.png" alt="Suragua Logo" class="hero-logo">
             <p> Lideres en hidratación corporativa.</p>
-            <p>30 de años llevando calidad y bienestar a las principales empresas de Argentina.</p>
+            <p>Desde 1991 abasteciendo a las principales empresas de Argentina.</p>
         </div>
     </section>
 
     <!-- CARRUSEL -->
     <div class="carousel-container">
-        <p class="carousel-title">Confían en nosotros</p>
+        <p class="carousel-title">Confían en nuestro servicio</p>
         <div class="slider">
             <div class="slide-track">
                 <div class="slide"><img src="ceamse-logo-png_seeklogo-185581.png" alt="CEAMSE"></div>
                 <div class="slide"><img src="river-plate-logo-png_seeklogo-369569.png" alt="RIVER PLATE"></div>
                 <div class="slide"><img src="TELEFE LOGO.png" alt="TELEFE"></div>
                 <div class="slide"><img src="el trece.png" alt="EL TRECE"></div>
-                <div class="slide"><img src="tn logo.webp" alt="TN"></div>
-                <div class="slide"><img src="12670_167-Benito-Roggio-logo-300x300.jpg" alt="BENITO ROGGIO"></div>
+                <div class="slide"><img src="tn-logo.webp" alt="TN"></div>
+                <div class="slide"><img src="logo-vector-naturgy.webp" alt="NATURGY"></div>
+                <div class="slide"><img src="CLIBA.jpg" alt="CLIBA"></div>
+                <div class="slide"><img src="SULLAIR.jpg" alt="SULLAIR"></div>
+                <div class="slide"><img src="tecsan.jpg" alt="TECSAN"></div>
+                <div class="slide"><img src="envairo.jpg" alt="ENVAIRO"></div>
+                <div class="slide"><img src="BENITO-ROGGIO-AMBIENTAL.jpg" alt="BR.AMBIENTAL"></div>
+                <div class="slide"><img src="logo softys.png" alt="SOFTYS"></div>
                 <div class="slide"><img src="logo_molinos.jpg" alt="MOLINO CAÑUELAS"></div>
                 <div class="slide"><img src="Toyota-logo-500x281.png" alt="TOYOTA"></div>
                 <div class="slide"><img src="TELEFONICAMOVILES.webp" alt="TELEFONICA"></div>
@@ -513,8 +553,14 @@
                 <div class="slide"><img src="river-plate-logo-png_seeklogo-369569.png" alt="RIVER PLATE"></div>
                 <div class="slide"><img src="TELEFE LOGO.png" alt="TELEFE"></div>
                 <div class="slide"><img src="el trece.png" alt="EL TRECE"></div>
-                <div class="slide"><img src="tn logo.webp" alt="TN"></div>
-                <div class="slide"><img src="12670_167-Benito-Roggio-logo-300x300.jpg" alt="BENITO ROGGIO"></div>
+                <div class="slide"><img src="tn-logo.webp" alt="TN"></div>
+                <div class="slide"><img src="logo-vector-naturgy.webp" alt="NATURGY"></div>
+                <div class="slide"><img src="CLIBA.jpg" alt="CLIBA"></div>
+                <div class="slide"><img src="SULLAIR.jpg" alt="SULLAIR"></div>
+                <div class="slide"><img src="tecsan.jpg" alt="TECSAN"></div>
+                <div class="slide"><img src="envairo.jpg" alt="ENVAIRO"></div>
+                <div class="slide"><img src="BENITO-ROGGIO-AMBIENTAL.jpg" alt="BR.AMBIENTAL"></div>
+                <div class="slide"><img src="logo softys.png" alt="SOFTYS"></div>
                 <div class="slide"><img src="logo_molinos.jpg" alt="MOLINO CAÑUELAS"></div>
                 <div class="slide"><img src="Toyota-logo-500x281.png" alt="TOYOTA"></div>
                 <div class="slide"><img src="TELEFONICAMOVILES.webp" alt="TELEFONICA"></div>
@@ -527,14 +573,25 @@
         <div class="container">
             <h2>ACERCA DE NOSOTROS</h2>
             <div class="acerca-content">
-                <p>Somos una <strong>empresa argentina con más de 30 años de experiencia</strong>...</p>
+                <p>Somos una <strong>empresa argentina con más de 30 años de experiencia en el rubro de agua envasada en botellones y Dispenser frío-calor</strong>...</p>
                 <p>Desde 1991 brindamos un servicio confiable en todo Buenos Aires.</p>
                 <div style="text-align: center; margin-top: 30px;">
-                    <a href="historia.html" class="btn-conocenos" style="background-color: #00468b;">NUESTRA HISTORIA</a>
+                    <a href="historia.html" class="btn-conocenos" style="background-color: #00468b;">VER MAS</a>
                 </div>
             </div>
         </div>
     </section>
+
+           <!-- SECCIÓN PROCEDIMIENTOS INTEGRADA AQUÍ -->
+        <section id="procedimientos">
+           
+            <div class="video-wrapper">
+                <video controls style="width: 100%; height: 100%;">
+                    <source src="./SURAGUA video.mp4" type="video/mp4">
+                    Tu navegador no soporta video.
+                </video>
+            </div>
+        </section>
 
     <section class="normativas-promo">
         <div class="promo-container">
@@ -551,13 +608,13 @@
     <!-- PRODUCTOS (BIDONES) -->
     <section id="productos" class="productos">
         <div class="container">
-            <span class="tag">Nuestros Productos</span>
-            <h2>Bidones de Agua</h2>
+            <span class="tag"> Productos</span>
+            <h2>Botellones de Agua</h2>
             <div class="grid-productos">
-                <div class="card"><img src="./b20.png" alt="Bidón 20L"><h3>Bidón 20 Litros</h3></div>
-                <div class="card"><img src="./b12.png" alt="Bidón 12L"><h3>Bidón 12 Litros</h3></div>
-                <div class="card"><img src="./b8.png" alt="Bidón 8L"><h3>Bidón 8 Litros</h3></div>
-                 <div class="card"><img src="./vasos v2.2.png" alt="Vasos Plasticos"><h3>Vasos de 180cc</h3></div>
+                <div class="card"><img src="./b20.png" alt="Bidón 20L"><h3 class="txt"><strong>Botellon 20 Litros.</strong> <p>Retornables.</p></h3></div>
+                <div class="card"><img src="./b12.png" alt="Bidón 12L"><h3 class="txt" ><strong>Botellon 12 Litros.</strong> <p>Retornables.</p></h3></div>
+                <div class="card"><img src="./b8.png" alt="Bidón 8L"><h3 class="txt"><strong>Botellon 8 Litros.</strong> <p>Retornables.</p></h3></div>
+                 <div class="card"><img src="./vasos v2.2.png" alt="Vasos Plasticos"><h3><strong>Vasos Plasticos</strong> <p>Descartables de 180cc.</p></h3></div>
 
                 
             </div>
@@ -572,7 +629,7 @@
                 <div class="card alt">
                     <img src="./dispenser red.png" alt="Dispenser de Red">
                     <h3>Dispenser de Red</h3>
-                    <p>Conexión directa con filtros de carbón activado. Agua purificada infinita.</p>
+                    <p>Purificador con filtros aprobados por ANMAT conexión directa a la red, Agua fría y caliente.</p>
                 </div>
                 <div class="card alt">
                     <img src="./dispenser v1 (1).png" alt="Dispenser a Bidón">
@@ -582,7 +639,7 @@
                 <div class="card alt">
                     <img src="./HOGAREÑO.png" alt="Hogareño">
                     <h3>Dispenser de agua natural</h3>
-                    <p>Disfrutá de agua fresca y natural en cualquier momento con este práctico dispenser de sobremesa</p>
+                    <p>Agua fresca y natural en cualquier momento con este práctico dispenser de sobremesa</p>
                 </div>
             </div>
         </div>
@@ -691,7 +748,7 @@
     <!-- FOOTER CON REDES SOCIALES -->
     <footer>
         <div class="footer-socials">
-            <a href="https://www.instagram.com/suragua_ok/" target="_blank"><i class="fab fa-instagram"></i></a>
+            <a href="https://www.instagram.com/suragua/" target="_blank"><i class="fab fa-instagram"></i></a>
             <a href="https://www.facebook.com/Suragua" target="_blank"><i class="fab fa-facebook"></i></a>
             <a href="https://www.linkedin.com/company/suragua" target="_blank"><i class="fab fa-linkedin"></i></a>
         </div>
@@ -699,6 +756,7 @@
             <h2 class="h2contacto">Contacto</h2>
             <a class="mailcorpo"  href="mailto:info@suragua.com.ar?subject=Consulta%20sobre%20el%20servicio">info@suragua.com.ar</a>
         </div>
+        <p>4912-7005</p>
         <p>&copy; 2026 Suragua - Argentina.</p>
     </footer>
 
