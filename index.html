@@ -1,3 +1,4 @@
+
 <!DOCTYPE html>
 <html lang="es">
 <head>
@@ -332,19 +333,38 @@
             }
             .normativas-promo { 
                 padding: 100px 0 !important; 
-                background-position: 55% center !important; /* AJUSTE: Imagen movida a la izquierda para ver el camión */
+                background-position: 58% center !important; 
             }
 
+            /* AJUSTE HERO MOBILE MÁS COMPACTO */
+            .hero {
+                height: 65vh !important;
+                min-height: 400px !important;
+                display: flex;
+                align-items: center;
+                justify-content: center;
+                overflow: hidden;
+                margin-top: 50px !important;
+            }
+            .hero-video {
+                height: 100% !important;
+                object-fit: cover !important;
+            }
+            .hero-logo {
+                width: 180px !important;
+                margin-bottom: -30px !important;
+            }
             /* AJUSTE LETRA VIDEO MOBILE */
             .hero p {
-                font-size: 18px !important; 
-                padding: 0 10px;
+                font-size: 16px !important; 
+                padding: 0 20px;
+                margin: 5px 0 !important;
             }
 
             /* AJUSTE FORMULARIO CONTACTO MOBILE */
             .contacto {
-                padding-top: 60px !important;
-                align-items: center !important; /* Centrado vertical */
+                padding-top: -80px !important;
+                align-items: flex-start !important; /* Centrado vertical */
             }
             .contacto-wrapper { 
                 margin-top: 0 !important; /* Quita el desfasaje negativo */
