@@ -190,7 +190,7 @@
 
         .hero p{
             color: #ffffff;
-            font-size: 30px;
+            font-size: 24px; /* AJUSTE: Letra achicada para versión PC */
             text-shadow: 20px 20px 20px rgba(8, 8, 8, 8);
         }
 
@@ -330,7 +330,16 @@
                 display: flex;
                 justify-content: center;
             }
-            .normativas-promo { padding: 100px 0 !important; }
+            .normativas-promo { 
+                padding: 100px 0 !important; 
+                background-position: 55% center !important; /* AJUSTE: Imagen movida a la izquierda para ver el camión */
+            }
+
+            /* AJUSTE LETRA VIDEO MOBILE */
+            .hero p {
+                font-size: 18px !important; 
+                padding: 0 10px;
+            }
 
             /* AJUSTE FORMULARIO CONTACTO MOBILE */
             .contacto {
