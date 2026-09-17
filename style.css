@@ -51,7 +51,7 @@ body {
 .hero {
     height: 115vh;
     /* Para que no se vea negro, usamos la misma imagen poster de fondo */
-    background-image: url('poster-video.jpg');
+    background-image: url('SURAGUA-FONDO.png');
     background-size: cover; 
     background-position: center;
     display: flex; 
@@ -134,21 +134,23 @@ body {
 .slider { width: 100%; overflow: hidden; }
 .slide-track { 
     display: flex; 
-    /* Ancho: 500px por logo * 18 logos totales */
-    width: calc(500px * 18); 
-    animation: scroll 25s linear infinite; 
+    /* Ancho: 340px por logo * 34 logos totales */
+    width: calc(340px * 34);
+    animation: scroll 28s linear infinite;
 }
 .slide { 
-    width: 500px; /* Logos mucho más anchos */
+    flex: 0 0 340px; /* Misma celda para cada logo, con menos aire entre marcas */
+    width: 340px;
     height: 250px; /* Logos mucho más altos */
     display: flex; 
     justify-content: center; 
     align-items: center; 
-    padding: 20px;
+    padding: 12px;
 }
 .slide img {
-    max-width: 420px; /* Tamaño máximo gigante */
-    max-height: 180px; 
+    display: block;
+    max-width: 300px; /* Tamaño máximo gigante */
+    max-height: 180px;
     filter: none; /* A COLOR */
     opacity: 1;    /* VISIBILIDAD TOTAL */
     transition: 0.3s;
@@ -156,10 +158,14 @@ body {
 }
 .slide img:hover { transform: scale(1.15); }
 
+.slide img[src="logo molino cañuelass%7D.webp"] {
+    max-height: 205px;
+}
+
 @keyframes scroll { 
-    0% { transform: translateX(0); } 
-    /* Se mueve la mitad del track (9 logos de 500px) */
-    100% { transform: translateX(calc(-500px * 9)); } 
+    0% { transform: translateX(0); }
+    /* Se mueve la mitad del track (17 logos de 340px) */
+    100% { transform: translateX(calc(-340px * 17)); }
 }
 
 /* --- SECCIÓN ACERCA --- */
@@ -303,10 +309,11 @@ footer p { font-size: 0.8rem; opacity: 0.6; }
     .hero h1 { font-size: 3rem; }
     .card.alt img { height: 350px; }
     .hero-logo { max-width: 350px; } 
-    .slide { width: 300px; } /* En móvil se achican un poco para que entren bien */
-    .slide img { max-width: 220px; }
-    .slide-track { width: calc(300px * 18); }
+    .slide { flex-basis: 220px; width: 220px; padding: 10px; } /* En móvil se achican un poco para que entren bien */
+    .slide img { max-width: 190px; max-height: 140px; }
+    .slide img[src="logo molino cañuelass%7D.webp"] { max-height: 165px; }
+    .slide-track { width: calc(220px * 34); }
     @keyframes scroll { 
-        100% { transform: translateX(calc(-300px * 9)); } 
+        100% { transform: translateX(calc(-220px * 17)); }
     }
 }
